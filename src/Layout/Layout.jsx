@@ -85,7 +85,7 @@ const Layout = () => {
             ))}
           </nav>
 
-          <div className="flex gap-6 md:gap-2">
+          <div className="flex gap-6">
             <Switch darkChecked={isDark} darkOnchange={handleToggle} />
             <div className="hidden md:flex items-center gap-6">
               <a href="tel:+992920091313" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group">
