@@ -85,16 +85,19 @@ const Layout = () => {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-6">
+          <div className="flex gap-6">
             <Switch darkChecked={isDark} darkOnchange={handleToggle} />
-            <a href="tel:+992920091313" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group">
-              <Phone className="w-4 h-4 text-red-600 group-hover:text-red-700 dark:text-red-500 dark:group-hover:text-red-400" />
-              <span className="text-sm font-medium">+992 (92) 009-13-13</span>
-            </a>
-            <Button variant="primary" size="sm">
-              Войти
-            </Button>
+            <div className="hidden md:flex items-center gap-6">
+              <a href="tel:+992920091313" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group">
+                <Phone className="w-4 h-4 text-red-600 group-hover:text-red-700 dark:text-red-500 dark:group-hover:text-red-400" />
+                <span className="text-sm font-medium">+992 (92) 009-13-13</span>
+              </a>
+              <Button variant="primary" size="sm">
+                Войти
+              </Button>
+            </div>
           </div>
+
 
           <button
             className="md:hidden text-gray-900 dark:text-zinc-100 p-2"
