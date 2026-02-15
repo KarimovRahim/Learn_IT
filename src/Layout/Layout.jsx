@@ -63,7 +63,7 @@ const Layout = () => {
       >
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center text-white font-bold dark:bg-blue-600">
+            <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center text-white font-bold">
               IT
             </div>
             <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Learn IT</span>
@@ -85,7 +85,7 @@ const Layout = () => {
             ))}
           </nav>
 
-          <div className="flex gap-2 md:gap-6">
+          <div className="flex gap-6 md:gap-2">
             <Switch darkChecked={isDark} darkOnchange={handleToggle} />
             <div className="hidden md:flex items-center gap-6">
               <a href="tel:+992920091313" className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group">
