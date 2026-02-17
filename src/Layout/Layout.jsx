@@ -178,7 +178,7 @@ const Layout = () => {
                         : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
                       }`}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    data-aos="fade-right"
+                    data-aos="fade-left"
                     data-aos-duration="400"
                     data-aos-delay={index * 50}
                   >
@@ -189,7 +189,7 @@ const Layout = () => {
                   <a 
                     href="tel:+992920091313" 
                     className="flex items-center gap-2 text-gray-600 dark:text-zinc-300"
-                    data-aos="fade-right"
+                    data-aos="fade-left"
                     data-aos-duration="400"
                     data-aos-delay="200"
                   >
@@ -198,7 +198,7 @@ const Layout = () => {
                   </a>
                   <Button 
                     className="w-full"
-                    data-aos="fade-up"
+                    data-aos="fade-left"
                     data-aos-duration="400"
                     data-aos-delay="250"
                   >
