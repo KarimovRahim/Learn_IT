@@ -161,53 +161,75 @@ const Layout = () => {
         </div>
 
         <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 overflow-hidden"
-            >
-              <div className="px-4 py-6 flex flex-col gap-4">
-                {navLinks.map((link, index) => (
-                  <Link
-                    key={link.name}
-                    to={link.path}
-                    className={`text-base font-medium py-2 border-b border-gray-100 last:border-0 dark:border-zinc-800/50 ${isActive(link.path)
-                        ? 'text-gray-900 dark:text-white'
-                        : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
-                      }`}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    data-aos="fade-left"
-                    data-aos-duration="400"
-                    data-aos-delay={index * 50}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-                <div className="pt-4 flex flex-col gap-4">
-                  <a 
-                    href="tel:+992920091313" 
-                    className="flex items-center gap-2 text-gray-600 dark:text-zinc-300"
-                    data-aos="fade-left"
-                    data-aos-duration="400"
-                    data-aos-delay="200"
-                  >
-                    <Phone className="w-4 h-4 text-red-600 dark:text-red-500" />
-                    <span>+992 (92) 009-13-13</span>
-                  </a>
-                  <Button 
-                    className="w-full"
-                    data-aos="fade-left"
-                    data-aos-duration="400"
-                    data-aos-delay="250"
-                  >
-                    Войти
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          )}
+{isMobileMenuOpen && (
+  <motion.div
+    initial={{ opacity: 0, y: -20 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -20 }}
+    transition={{ 
+      duration: 0.3,
+      ease: [0.4, 0, 0.2, 1] // кастомный easing для более плавности
+    }}
+    className="md:hidden bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 overflow-hidden"
+  >
+    <div className="px-4 py-6 flex flex-col gap-4">
+      {navLinks.map((link, index) => (
+        <motion.div
+          key={link.name}
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ 
+            duration: 0.4,
+            delay: index * 0.05,
+            ease: [0.4, 0, 0.2, 1]
+          }}
+        >
+          <Link
+            to={link.path}
+            className={`text-base font-medium py-2 border-b border-gray-100 last:border-0 dark:border-zinc-800/50 block ${
+              isActive(link.path)
+                ? 'text-gray-900 dark:text-white'
+                : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >
+            {link.name}
+          </Link>
+        </motion.div>
+      ))}
+      
+      <motion.div 
+        className="pt-4 flex flex-col gap-4"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ 
+          duration: 0.4,
+          delay: navLinks.length * 0.05 + 0.1,
+          ease: [0.4, 0, 0.2, 1]
+        }}
+      >
+        <a 
+          href="tel:+992920091313" 
+          className="flex items-center gap-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+        >
+          <Phone className="w-4 h-4 text-red-600 dark:text-red-500" />
+          <span>+992 (92) 009-13-13</span>
+        </a>
+        
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Button className="w-full">
+            Войти
+          </Button>
+        </motion.div>
+      </motion.div>
+    </div>
+  </motion.div>
+)}
         </AnimatePresence>
       </header>
 
