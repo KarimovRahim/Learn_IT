@@ -166,7 +166,7 @@ const Services = () => {
                 <div
                   key={index}
                   className="bg-gray-50 border border-gray-200 rounded-xl p-4 hover:border-red-600/50 transition-colors dark:bg-zinc-950 dark:border-zinc-800 dark:hover:border-red-500/30"
-                  data-aos="fade-left"
+                  data-aos="fade-up"
                   data-aos-duration="500"
                   data-aos-delay={250 + index * 50}
                 >
