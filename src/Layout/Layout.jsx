@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation, Outlet } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link';
 import { Menu, X, Phone } from 'lucide-react'
 import Button from '../Components/UI/Button.jsx'  // Исправленный путь
 import { motion, AnimatePresence } from 'framer-motion'
@@ -136,16 +137,22 @@ const Layout = () => {
                 <Phone className="w-4 h-4 text-red-600 group-hover:text-red-700 dark:text-red-500 dark:group-hover:text-red-400" />
                 <span className="text-sm font-medium">+992 (92) 009-13-13</span>
               </a>
-              <Button
-                variant="primary"
-                size="sm"
-                data-aos="zoom-in"
-                data-aos-duration="500"
-                data-aos-delay="800"
-                data-aos-easing="ease-out-back"
+              <HashLink
+                smooth
+                to="/#contacts"
               >
-                Войти
-              </Button>
+                <Button
+                  variant="primary"
+                  size="sm"
+                  data-aos="zoom-in"
+                  data-aos-duration="500"
+                  data-aos-delay="800"
+                  data-aos-easing="ease-out-back"
+                >
+                  Войти
+                </Button>
+
+              </HashLink>
             </div>
           </div>
 
@@ -221,9 +228,14 @@ const Layout = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <Button className="w-full bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-900 dark:text-white border-0">
-                      Войти
-                    </Button>
+                    <HashLink
+                      smooth
+                      to="/#contacts"
+                    >
+                      <Button className="w-full bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-900 dark:text-white border-0">
+                        Войти
+                      </Button>
+                    </HashLink>
                   </motion.div>
                 </motion.div>
               </div>

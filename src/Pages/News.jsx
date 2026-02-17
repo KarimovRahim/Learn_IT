@@ -1,4 +1,5 @@
 import React from 'react'
+import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
 import { Calendar, User, Clock, Tag, ArrowRight, TrendingUp, BookOpen, MessageSquare, Newspaper, Share2, Heart } from 'lucide-react'
@@ -80,17 +81,17 @@ const popularTags = [
 const News = () => {
   return (
     <div className="pt-20">
-      <Section 
+      <Section
         className="bg-gradient-to-b from-white to-gray-100 dark:from-zinc-950 dark:to-zinc-900"
         data-aos="fade"
         data-aos-duration="1000"
       >
-        <div 
+        <div
           className="text-center max-w-3xl mx-auto mb-16"
           data-aos="fade-up"
           data-aos-duration="800"
         >
-          <div 
+          <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-6 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
             data-aos="fade-up"
             data-aos-duration="600"
@@ -99,7 +100,7 @@ const News = () => {
             <Newspaper className="w-4 h-4" />
             Самые свежие материалы из мира IT
           </div>
-          <h1 
+          <h1
             className="text-4xl md:text-5xl font-bold text-black mb-6 dark:text-white"
             data-aos="fade-up"
             data-aos-duration="700"
@@ -107,7 +108,7 @@ const News = () => {
           >
             <span className="text-red-600 dark:text-red-500">Новости</span> и статьи
           </h1>
-          <p 
+          <p
             className="text-xl text-black/70 dark:text-zinc-400"
             data-aos="fade-up"
             data-aos-duration="700"
@@ -173,13 +174,13 @@ const News = () => {
           ))}
         </div>
 
-        <div 
+        <div
           className="text-center"
           data-aos="fade-up"
           data-aos-duration="800"
           data-aos-delay="200"
         >
-          <div 
+          <div
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-6 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
             data-aos="fade-up"
             data-aos-duration="600"
@@ -189,7 +190,7 @@ const News = () => {
             Будьте в курсе последних новостей
           </div>
 
-          <h2 
+          <h2
             className="text-2xl font-bold text-black mb-6 dark:text-white"
             data-aos="fade-up"
             data-aos-duration="600"
@@ -197,7 +198,7 @@ const News = () => {
           >
             Подпишитесь на рассылку
           </h2>
-          <p 
+          <p
             className="text-black/70 mb-8 max-w-2xl mx-auto dark:text-zinc-400"
             data-aos="fade-up"
             data-aos-duration="600"
@@ -206,16 +207,22 @@ const News = () => {
             Получайте самые интересные статьи и новости из мира IT прямо на почту
           </p>
 
-          <div 
+          <div
             className="max-w-md mx-auto flex justify-center gap-4"
             data-aos="fade-up"
             data-aos-duration="600"
             data-aos-delay="400"
           >
-            <Button size="lg">Связаться с менеджером</Button>
+                          <HashLink
+                            smooth
+                            to="/#contacts"
+                          >
+                            <Button size="lg">Связаться с менеджером</Button>
+            
+                          </HashLink>
           </div>
 
-          <p 
+          <p
             className="text-xs text-black/50 mt-4 dark:text-zinc-500"
             data-aos="fade-up"
             data-aos-duration="600"

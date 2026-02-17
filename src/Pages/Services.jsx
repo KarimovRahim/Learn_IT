@@ -1,4 +1,5 @@
 import React from 'react'
+import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
 import { Briefcase, Users, Code, Settings, Shield, Zap, Globe, BarChart, Target, Headphones } from 'lucide-react'
@@ -221,7 +222,13 @@ const Services = () => {
             data-aos-delay="400"
           >
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
-              <Button size="lg">Связаться с менеджером</Button>
+              <HashLink
+                smooth
+                to="/#contacts"
+              >
+                <Button size="lg">Связаться с менеджером</Button>
+
+              </HashLink>
             </form>
           </div>
         </div>

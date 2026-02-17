@@ -1,7 +1,8 @@
 import React from 'react'
+import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
-import { CheckCircle2, Clock, Users, Award, Star, Calendar, DollarSign, Code, Database, PenTool, Smartphone, Zap, Cloud } from 'lucide-react'
+import { CheckCircle2, Clock, Users, Star, DollarSign, Code, Database, PenTool, Smartphone, Zap, Cloud } from 'lucide-react'
 
 const allCourses = [
   {
@@ -230,14 +231,13 @@ const Courses = () => {
           >
             Напишите нам, и мы поможем подобрать индивидуальную программу обучения под ваши цели
           </p>
-          <Button 
-            size="lg"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="200"
-          >
-            Связаться с менеджером
-          </Button>
+                        <HashLink
+                smooth
+                to="/#contacts"
+              >
+                <Button size="lg">Связаться с менеджером</Button>
+
+              </HashLink>
         </div>
       </Section>
     </div>

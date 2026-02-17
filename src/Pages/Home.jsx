@@ -1,6 +1,12 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
+import log from '../assets/log.png'
+import Mehrdod from '../assets/mehrdod.jpg'
+import Amir from '../assets/amir.jpg'
+import Ismoil from '../assets/ismoil.jpg'
+import Narzullo from '../assets/narzullo.jpg'
 import { ArrowRight, Code, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Lightbulb, Mail, MapPin, Phone as PhoneIcon, Linkedin, Twitter, Github } from 'lucide-react'
 
 const Home = () => {
@@ -72,20 +78,24 @@ const Home = () => {
 
   const team = [
     {
-      name: 'Алексей Смирнов',
-      role: 'Основатель & Lead Backend',
+      name: 'Тохири Мехрдод',
+      role: 'СЕО LearnITacademy, Ментор и FrontEnd разработчик',
+      img: Mehrdod,
     },
     {
-      name: 'Мария Петрова',
-      role: 'Senior UI/UX Дизайнер',
+      name: 'Амир Олимов',
+      role: 'Ментор, FullStack-разработчик',
+      img: Amir,
     },
     {
-      name: 'Дмитрий Иванов',
-      role: 'Frontend Архитектор',
+      name: 'Нарзуллоев Нарзулло',
+      role: 'Ментор, Frontend-разработчик',
+      img: Narzullo,
     },
     {
-      name: 'Елена Козлова',
-      role: 'Mobile Lead',
+      name: 'Исмоил Олимов',
+      role: 'Ментор, Frontend-разработчик',
+      img: Ismoil,
     },
   ]
 
@@ -105,6 +115,41 @@ const Home = () => {
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-white via-white to-white dark:from-zinc-950/80 dark:via-zinc-950/50 dark:to-zinc-950"></div>
         </div>
+
+        {/* Логотип справа - десктоп */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 w-1/2 hidden lg:flex justify-end items-center z-5 pointer-events-none">
+          <motion.div
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+            className="relative"
+          >
+            <img
+              src={log}
+              alt="Learn IT Academy"
+              className="w-auto h-auto max-w-[90%] max-h-[80vh] object-contain 
+                   opacity-90 dark:opacity-80
+                   drop-shadow-2xl
+                   dark:brightness-0 dark:invert dark:drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]"
+            />
+          </motion.div>
+        </div>
+
+        {/* Логотип для мобильных */}
+        <motion.div
+          className="absolute right-0 bottom-0 w-48 h-48 md:w-64 md:h-64 lg:hidden z-5 pointer-events-none"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 0.2, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+        >
+          <img
+            src={log}
+            alt="Learn IT Academy"
+            className="w-full h-full object-contain 
+                 dark:brightness-0 dark:invert dark:opacity-20"
+          />
+        </motion.div>
+
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="max-w-3xl">
             <div
@@ -378,28 +423,36 @@ const Home = () => {
               data-aos-duration="600"
               data-aos-delay={100 + index * 50}
             >
-              <div className="relative overflow-hidden rounded-xl aspect-[3/4] mb-4 bg-red-50 flex items-center justify-center border border-red-100 dark:bg-zinc-900 dark:border-zinc-800">
-                <div className="text-4xl font-bold text-red-600/30 dark:text-zinc-700">
-                  {member.name.charAt(0)}
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity dark:from-zinc-950/90"></div>
+              <div className="relative overflow-hidden rounded-xl aspect-[3/4] mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center border border-gray-200 dark:border-zinc-700 shadow-lg group-hover:shadow-xl transition-all duration-500">
 
-                <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                  <a href="#" className="p-2 bg-white border border-red-200 rounded-full text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition-colors dark:bg-zinc-800 dark:border-zinc-700 dark:text-white dark:hover:bg-red-600 dark:hover:border-red-600">
-                    <Linkedin className="w-4 h-4" />
-                  </a>
-                  <a href="#" className="p-2 bg-white border border-red-200 rounded-full text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition-colors dark:bg-zinc-800 dark:border-zinc-700 dark:text-white dark:hover:bg-red-600 dark:hover:border-red-600">
-                    <Twitter className="w-4 h-4" />
-                  </a>
-                  <a href="#" className="p-2 bg-white border border-red-200 rounded-full text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition-colors dark:bg-zinc-800 dark:border-zinc-700 dark:text-white dark:hover:bg-red-600 dark:hover:border-red-600">
-                    <Github className="w-4 h-4" />
-                  </a>
+                {/* Фотография - теперь правильно отображается */}
+                <img
+                  src={member.img}
+                  alt={member.name}
+                  className="w-full h-full object-cover transition-all duration-700 ease-out group-hover:scale-110 group-hover:rotate-1"
+                />
+
+                {/* Оверлей с градиентом при наведении */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                {/* Иконка или дополнительная информация при наведении */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                  <p className="text-white text-sm font-medium text-center">
+                    {member.role}
+                  </p>
                 </div>
               </div>
 
-              <div className="text-center">
-                <h3 className="text-lg font-bold text-black dark:text-white">{member.name}</h3>
-                <p className="text-red-600 text-sm font-medium dark:text-red-500">{member.role}</p>
+              <div className="text-center relative">
+                <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors duration-300">
+                  {member.name}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-1 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-300">
+                  {member.role}
+                </p>
+
+                {/* Линия под ролью при наведении */}
+                <div className="w-0 h-0.5 bg-red-500 mx-auto mt-3 group-hover:w-16 transition-all duration-500"></div>
               </div>
             </div>
           ))}
@@ -448,7 +501,7 @@ const Home = () => {
 
       {/* Contact Section */}
       <Section
-        id="contact"
+        id="contacts"
         className="bg-white dark:bg-transparent"
         data-aos="fade-up"
         data-aos-duration="1000"
@@ -530,9 +583,9 @@ const Home = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div
                   className="space-y-2"
-                  // data-aos="fade-up"
-                  // data-aos-duration="500"
-                  // data-aos-delay="250"
+                // data-aos="fade-up"
+                // data-aos-duration="500"
+                // data-aos-delay="250"
                 >
                   <label className="text-sm font-medium text-black dark:text-zinc-300">Имя</label>
                   <input
@@ -543,9 +596,9 @@ const Home = () => {
                 </div>
                 <div
                   className="space-y-2"
-                  // data-aos="fade-up"
-                  // data-aos-duration="500"
-                  // data-aos-delay="300"
+                // data-aos="fade-up"
+                // data-aos-duration="500"
+                // data-aos-delay="300"
                 >
                   <label className="text-sm font-medium text-black dark:text-zinc-300">Фамилия</label>
                   <input
@@ -558,9 +611,9 @@ const Home = () => {
 
               <div
                 className="space-y-2"
-                // data-aos="fade-up"
-                // data-aos-duration="500"
-                // data-aos-delay="350"
+              // data-aos="fade-up"
+              // data-aos-duration="500"
+              // data-aos-delay="350"
               >
                 <label className="text-sm font-medium text-black dark:text-zinc-300">Телефон</label>
                 <input
@@ -572,9 +625,9 @@ const Home = () => {
 
               <div
                 className="space-y-2"
-                // data-aos="fade-up"
-                // data-aos-duration="500"
-                // data-aos-delay="400"
+              // data-aos="fade-up"
+              // data-aos-duration="500"
+              // data-aos-delay="400"
               >
                 <label className="text-sm font-medium text-black dark:text-zinc-300">Email</label>
                 <input
@@ -586,9 +639,9 @@ const Home = () => {
 
               <div
                 className="space-y-2"
-                // data-aos="fade-up"
-                // data-aos-duration="500"
-                // data-aos-delay="450"
+              // data-aos="fade-up"
+              // data-aos-duration="500"
+              // data-aos-delay="450"
               >
                 <label className="text-sm font-medium text-black dark:text-zinc-300">Сообщение</label>
                 <textarea
@@ -600,18 +653,18 @@ const Home = () => {
               <Button
                 type="submit"
                 className="w-full h-12 mt-2"
-                // data-aos="fade-up"
-                // data-aos-duration="500"
-                // data-aos-delay="500"
+              // data-aos="fade-up"
+              // data-aos-duration="500"
+              // data-aos-delay="500"
               >
                 Отправить заявку
               </Button>
 
               <p
                 className="text-xs text-black/50 text-center mt-4 dark:text-zinc-500"
-                // data-aos="fade-up"
-                // data-aos-duration="500"
-                // data-aos-delay="550"
+              // data-aos="fade-up"
+              // data-aos-duration="500"
+              // data-aos-delay="550"
               >
                 Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности
               </p>
