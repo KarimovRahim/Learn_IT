@@ -79,8 +79,8 @@ const Layout = () => {
     <div className="min-h-screen dark:bg-zinc-950 bg-zinc-50 font-sans selection-red">
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-            ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-zinc-950/80 dark:border-zinc-800 py-3'
-            : 'bg-white dark:bg-transparent py-5'
+          ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-zinc-950/80 dark:border-zinc-800 py-3'
+          : 'bg-white dark:bg-transparent py-5'
           }`}
         data-aos="fade-down"
         data-aos-duration="600"
@@ -89,8 +89,8 @@ const Layout = () => {
         data-aos-once="true"
       >
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl flex items-center justify-between">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="flex items-center gap-2"
             data-aos="fade-right"
             data-aos-duration="800"
@@ -109,8 +109,8 @@ const Layout = () => {
                 key={link.name}
                 to={link.path}
                 className={`text-sm font-medium transition-colors ${isActive(link.path)
-                    ? 'text-gray-900 border-b-2 border-red-600 pb-1 dark:text-white dark:border-red-500'
-                    : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
+                  ? 'text-gray-900 border-b-2 border-red-600 pb-1 dark:text-white dark:border-red-500'
+                  : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
                   }`}
                 data-aos="fade-down"
                 data-aos-duration="500"
@@ -125,8 +125,8 @@ const Layout = () => {
           <div className="flex gap-6" data-aos="fade-left" data-aos-duration="700" data-aos-delay="600">
             <Switch darkChecked={isDark} darkOnchange={handleToggle} />
             <div className="hidden md:flex items-center gap-6">
-              <a 
-                href="tel:+992920091313" 
+              <a
+                href="tel:+992920091313"
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group"
                 data-aos="fade-left"
                 data-aos-duration="600"
@@ -136,8 +136,8 @@ const Layout = () => {
                 <Phone className="w-4 h-4 text-red-600 group-hover:text-red-700 dark:text-red-500 dark:group-hover:text-red-400" />
                 <span className="text-sm font-medium">+992 (92) 009-13-13</span>
               </a>
-              <Button 
-                variant="primary" 
+              <Button
+                variant="primary"
                 size="sm"
                 data-aos="zoom-in"
                 data-aos-duration="500"
@@ -161,75 +161,74 @@ const Layout = () => {
         </div>
 
         <AnimatePresence>
-{isMobileMenuOpen && (
-  <motion.div
-    initial={{ opacity: 0, y: -20 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -20 }}
-    transition={{ 
-      duration: 0.3,
-      ease: [0.4, 0, 0.2, 1] // кастомный easing для более плавности
-    }}
-    className="md:hidden bg-white border-b border-gray-200 dark:bg-zinc-950 dark:border-zinc-800 overflow-hidden"
-  >
-    <div className="px-4 py-6 flex flex-col gap-4">
-      {navLinks.map((link, index) => (
-        <motion.div
-          key={link.name}
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ 
-            duration: 0.4,
-            delay: index * 0.05,
-            ease: [0.4, 0, 0.2, 1]
-          }}
-        >
-          <Link
-            to={link.path}
-            className={`text-base font-medium py-2 border-b border-gray-100 last:border-0 dark:border-zinc-800/50 block ${
-              isActive(link.path)
-                ? 'text-gray-900 dark:text-white'
-                : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
-            }`}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >
-            {link.name}
-          </Link>
-        </motion.div>
-      ))}
-      
-      <motion.div 
-        className="pt-4 flex flex-col gap-4"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ 
-          duration: 0.4,
-          delay: navLinks.length * 0.05 + 0.1,
-          ease: [0.4, 0, 0.2, 1]
-        }}
-      >
-        <a 
-          href="tel:+992920091313" 
-          className="flex items-center gap-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-        >
-          <Phone className="w-4 h-4 text-red-600 dark:text-red-500" />
-          <span>+992 (92) 009-13-13</span>
-        </a>
-        
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Button className="w-full">
-            Войти
-          </Button>
-        </motion.div>
-      </motion.div>
-    </div>
-  </motion.div>
-)}
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 50 }}
+              transition={{
+                duration: 0.3,
+                ease: [0.4, 0, 0.2, 1]
+              }}
+              className="md:hidden fixed top-[73px] right-0 w-80 bg-gray-50/95 dark:bg-zinc-900/95 backdrop-blur-sm border-l border-gray-200 dark:border-zinc-800 shadow-xl rounded-bl-2xl overflow-hidden"
+            >
+              <div className="px-4 py-6 flex flex-col gap-4">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.name}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 20 }}
+                    transition={{
+                      duration: 0.4,
+                      delay: index * 0.05,
+                      ease: [0.4, 0, 0.2, 1]
+                    }}
+                  >
+                    <Link
+                      to={link.path}
+                      className={`text-base font-medium py-2 border-b border-gray-200 last:border-0 dark:border-zinc-700/50 block ${isActive(link.path)
+                        ? 'text-gray-900 dark:text-white'
+                        : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
+                        }`}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.name}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <motion.div
+                  className="pt-4 flex flex-col gap-4"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{
+                    duration: 0.4,
+                    delay: navLinks.length * 0.05 + 0.1,
+                    ease: [0.4, 0, 0.2, 1]
+                  }}
+                >
+                  <a
+                    href="tel:+992920091313"
+                    className="flex items-center gap-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-red-600 dark:text-red-500" />
+                    <span>+992 (92) 009-13-13</span>
+                  </a>
+
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <Button className="w-full bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-900 dark:text-white border-0">
+                      Войти
+                    </Button>
+                  </motion.div>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </header>
 
