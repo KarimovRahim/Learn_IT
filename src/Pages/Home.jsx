@@ -119,7 +119,7 @@ const Home = () => {
         </div>
 
         {/* Фон с сеткой кубиков */}
-        <div className="absolute inset-0 z-1 pointer-events-none">
+        <div className="absolute inset-0 z-1 pointer-events-none hidden md:block">
           <CubeGrid
             cubeSize={8}
             gap={32}
