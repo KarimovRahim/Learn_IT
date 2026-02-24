@@ -77,11 +77,11 @@ const Layout = () => {
   const isActive = (path) => location.pathname === path
 
   return (
-    <div className="min-h-screen dark:bg-zinc-950 bg-zinc-50 font-sans selection-red">
+    <div className="min-h-screen bg-zinc-950 font-sans selection-red">
       <header
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-          ? 'bg-white/80 backdrop-blur-md border-b border-gray-200 dark:bg-zinc-950/80 dark:border-zinc-800 py-3'
-          : 'bg-white dark:bg-transparent py-5'
+          ? 'backdrop-blur-md border-b border-zinc-800 bg-zinc-950/80 py-3'
+          : 'bg-transparent py-5'
           }`}
         data-aos="fade-down"
         data-aos-duration="600"
@@ -101,7 +101,7 @@ const Layout = () => {
             <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center text-white font-bold">
               IT
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">Learn IT</span>
+            <span className="text-xl font-bold text-white tracking-tight">Learn IT</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -110,8 +110,8 @@ const Layout = () => {
                 key={link.name}
                 to={link.path}
                 className={`text-sm font-medium transition-colors ${isActive(link.path)
-                  ? 'text-gray-900 border-b-2 border-red-600 pb-1 dark:text-white dark:border-red-500'
-                  : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
+                  ? 'text-white border-b-2 border-red-500 pb-1'
+                  : 'text-zinc-400 hover:text-white'
                   }`}
                 data-aos="fade-down"
                 data-aos-duration="500"
@@ -128,13 +128,13 @@ const Layout = () => {
             <div className="hidden md:flex items-center gap-6">
               <a
                 href="tel:+992920091313"
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white transition-colors group"
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
                 data-aos="fade-left"
                 data-aos-duration="600"
                 data-aos-delay="700"
                 data-aos-easing="ease-out-quad"
               >
-                <Phone className="w-4 h-4 text-red-600 group-hover:text-red-700 dark:text-red-500 dark:group-hover:text-red-400" />
+                <Phone className="w-4 h-4 text-red-500 group-hover:text-red-400" />
                 <span className="text-sm font-medium">+992 (92) 009-13-13</span>
               </a>
               <HashLink
@@ -151,13 +151,12 @@ const Layout = () => {
                 >
                   Войти
                 </Button>
-
               </HashLink>
             </div>
           </div>
 
           <button
-            className="md:hidden text-gray-900 dark:text-zinc-100 p-2"
+            className="md:hidden text-white p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             data-aos="fade-left"
             data-aos-duration="500"
@@ -177,7 +176,7 @@ const Layout = () => {
                 duration: 0.3,
                 ease: [0.4, 0, 0.2, 1]
               }}
-              className="md:hidden fixed top-[73px] right-0 w-80 bg-gray-50/95 dark:bg-zinc-900/95 backdrop-blur-sm border-l border-gray-200 dark:border-zinc-800 shadow-xl rounded-bl-2xl overflow-hidden"
+              className="md:hidden fixed top-[73px] right-0 w-80 bg-zinc-900/95 backdrop-blur-sm border-l border-zinc-800 shadow-xl rounded-bl-2xl overflow-hidden"
             >
               <div className="px-4 py-6 flex flex-col gap-4">
                 {navLinks.map((link, index) => (
@@ -194,9 +193,9 @@ const Layout = () => {
                   >
                     <Link
                       to={link.path}
-                      className={`text-base font-medium py-2 border-b border-gray-200 last:border-0 dark:border-zinc-700/50 block ${isActive(link.path)
-                        ? 'text-gray-900 dark:text-white'
-                        : 'text-gray-600 hover:text-gray-900 dark:text-zinc-300 dark:hover:text-white'
+                      className={`text-base font-medium py-2 border-b border-zinc-800 last:border-0 block ${isActive(link.path)
+                        ? 'text-white'
+                        : 'text-zinc-400 hover:text-white'
                         }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
@@ -218,9 +217,9 @@ const Layout = () => {
                 >
                   <a
                     href="tel:+992920091313"
-                    className="flex items-center gap-2 text-gray-600 dark:text-zinc-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
                   >
-                    <Phone className="w-4 h-4 text-red-600 dark:text-red-500" />
+                    <Phone className="w-4 h-4 text-red-500" />
                     <span>+992 (92) 009-13-13</span>
                   </a>
 
@@ -232,7 +231,7 @@ const Layout = () => {
                       smooth
                       to="/#contacts"
                     >
-                      <Button className="w-full bg-gray-100 hover:bg-gray-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-gray-900 dark:text-white border-0">
+                      <Button className="w-full bg-zinc-800 hover:bg-zinc-700 text-white border-0">
                         Войти
                       </Button>
                     </HashLink>

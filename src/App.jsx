@@ -31,7 +31,11 @@ const App = () => {
         }
       ]
     }
-  ]);
+  ], {
+    future: {
+      v7_startTransition: true
+    }
+  });
 
   return <RouterProvider router={router} />
 }
