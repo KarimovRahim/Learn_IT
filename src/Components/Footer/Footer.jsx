@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Send, Facebook, Instagram } from 'lucide-react'
+import { IconBrandTelegram, IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react';
 
 const Footer = () => {
   return (
@@ -23,15 +23,42 @@ const Footer = () => {
             <p className="text-black/50 text-sm leading-relaxed mb-6 dark:text-zinc-500">
               Современная академия программирования. Мы помогаем людям освоить новые профессии и изменить свою жизнь к лучшему.
             </p>
+
             <div className="flex gap-4">
-              <a href="#" className="text-black/40 hover:text-red-600 transition-colors dark:text-zinc-400 dark:hover:text-white">
-                <Send className="w-5 h-5" />
+              <a
+                href="https://t.me/Learn_IT_academy_tj"
+                className="group relative"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="absolute inset-0 bg-[#0088cc] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md"></div>
+                <div className="relative p-2 bg-white dark:bg-zinc-800 rounded-full shadow-lg group-hover:shadow-[#0088cc]/50 group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+                  <IconBrandTelegram className="w-5 h-5 text-[#0088cc]" stroke={1.5} />
+                </div>
               </a>
-              <a href="#" className="text-black/40 hover:text-red-600 transition-colors dark:text-zinc-400 dark:hover:text-white">
-                <Facebook className="w-5 h-5" />
+
+              <a
+                href="https://www.facebook.com/profile.php?id=61560358667207&mibextid=ZbWKwL"
+                className="group relative"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="absolute inset-0 bg-[#1877f2] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md"></div>
+                <div className="relative p-2 bg-white dark:bg-zinc-800 rounded-full shadow-lg group-hover:shadow-[#1877f2]/50 group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+                  <IconBrandFacebook className="w-5 h-5 text-[#1877f2]" stroke={1.5} />
+                </div>
               </a>
-              <a href="#" className="text-black/40 hover:text-red-600 transition-colors dark:text-zinc-400 dark:hover:text-white">
-                <Instagram className="w-5 h-5" />
+
+              <a
+                href="https://www.instagram.com/learn_it_academy.tj?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+                className="group relative"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-md"></div>
+                <div className="relative p-2 bg-white dark:bg-zinc-800 rounded-full shadow-lg group-hover:shadow-[#ee2a7b]/50 group-hover:shadow-xl transition-all duration-300 group-hover:-translate-y-1">
+                  <IconBrandInstagram className="w-5 h-5 text-[#ee2a7b]" stroke={1.5} />
+                </div>
               </a>
             </div>
           </div>
@@ -75,9 +102,9 @@ const Footer = () => {
         {/* Нижняя часть */}
         <div
           className="border-t border-black/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-black/40 dark:border-zinc-800 dark:text-zinc-600"
-          // data-aos="fade-up"
-          // data-aos-duration="500"
-          // data-aos-delay="300"
+        // data-aos="fade-up"
+        // data-aos-duration="500"
+        // data-aos-delay="300"
         >
           <p>© 2026 Learn IT Academy. Все права защищены.</p>
           <div className="flex gap-6">

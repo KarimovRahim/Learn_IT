@@ -1,5 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
 import log from '../assets/log.png'
@@ -109,7 +111,7 @@ const Home = () => {
     <>
       {/* Hero Section */}
       <section
-        className="relative min-h-screen flex items-center pt-20 overflow-hidden bg-transparent"
+        className="relative min-h-screen flex items-center pt-20 pb-10 overflow-hidden bg-transparent"
         data-aos="fade"
         data-aos-duration="1000"
       >
@@ -190,13 +192,26 @@ const Home = () => {
                 data-aos-duration="800"
                 data-aos-delay="600"
               >
-                <Button size="lg" className="group">
-                  Получить консультацию
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-                <Button variant="outline" size="lg">
-                  Посмотреть программу
-                </Button>
+                <div className="dark">
+                  <HashLink
+                    smooth
+                    to="#contacts"
+                  >
+                    <Button size="lg" className="group">
+                      Получить консультацию
+                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </HashLink>
+                </div>
+                <div className="dark">
+                  <Link
+                    to="/courses"
+                  >
+                    <Button variant="outline" size="lg">
+                      Посмотреть программу
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
 
@@ -715,6 +730,7 @@ const Home = () => {
             </form>
           </div>
         </div>
+
       </Section>
     </>
   )
