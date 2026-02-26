@@ -588,7 +588,7 @@ const BurgerMenu = () => {
                   </AnimatePresence>
 
                   {/* Эффект "волны" при клике */}
-                  <motion.div 
+                  {/* <motion.div 
                     className="absolute inset-0 pointer-events-none"
                     initial={{ scale: 0, opacity: 0.5 }}
                     whileTap={{ scale: 2, opacity: 0 }}
@@ -599,10 +599,10 @@ const BurgerMenu = () => {
                       originY: 0.5
                     }}
                   />
-                </motion.div>
+                </motion.div> */}
 
                 {/* ВАРИАНТ 2: Анимация "распадающиеся буквы" - раскомментируйте для использования */}
-                {/* <motion.div 
+                <motion.div 
                   variants={itemVariants}
                   onClick={handleThemeToggle}
                   whileHover={{ scale: 1.02 }}
@@ -753,7 +753,7 @@ const BurgerMenu = () => {
                       originY: 0.5
                     }}
                   />
-                </motion.div> */}
+                </motion.div>
 
                 {/* ВАРИАНТ 3: Анимация "скролл" - раскомментируйте для использования */}
                 {/* <motion.div 
