@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation, Outlet } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link';
-import { Menu, X, Phone } from 'lucide-react'
-import Button from '../Components/UI/Button.jsx'  // Исправленный путь
-import { motion, AnimatePresence } from 'framer-motion'
-import Switch from '../Components/swintcher.jsx'  // Исправленный путь
-import Footer from '../Components/Footer/Footer.jsx'  // Исправленный путь
+import { Phone } from 'lucide-react'
+import Button from '../Components/UI/Button.jsx'
+import { motion } from 'framer-motion'
+import Switch from '../Components/swintcher.jsx'
+import Footer from '../Components/Footer/Footer.jsx'
+import BurgerMenu from '../Components/BurgerMenu.jsx'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
 const Layout = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDark, setIsDark] = useState(false)
   const location = useLocation()
 
@@ -25,7 +25,6 @@ const Layout = () => {
       delay: 100,
     });
 
-    // Обновляем AOS при изменении маршрута
     return () => {
       AOS.refresh();
     };
@@ -123,7 +122,7 @@ const Layout = () => {
             ))}
           </nav>
 
-          <div className="flex gap-6" data-aos="fade-left" data-aos-duration="700" data-aos-delay="600">
+          <div className="flex items-center gap-6" data-aos="fade-left" data-aos-duration="700" data-aos-delay="600">
             <Switch darkChecked={isDark} darkOnchange={handleToggle} />
             <div className="hidden md:flex items-center gap-6">
               <a
@@ -153,94 +152,11 @@ const Layout = () => {
                 </Button>
               </HashLink>
             </div>
+
+            {/* Заменяем старый бургер на новый компонент */}
+            <BurgerMenu />
           </div>
-
-          <button
-            className="md:hidden text-white p-2"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            data-aos="fade-left"
-            data-aos-duration="500"
-            data-aos-delay="700"
-          >
-            {isMobileMenuOpen ? <X /> : <Menu />}
-          </button>
         </div>
-
-        <AnimatePresence>
-          {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 50 }}
-              transition={{
-                duration: 0.3,
-                ease: [0.4, 0, 0.2, 1]
-              }}
-              className="md:hidden fixed top-[73px] right-0 w-80 bg-zinc-900/95 backdrop-blur-sm border-l border-zinc-800 shadow-xl rounded-bl-2xl overflow-hidden"
-            >
-              <div className="px-4 py-6 flex flex-col gap-4">
-                {navLinks.map((link, index) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 20 }}
-                    transition={{
-                      duration: 0.4,
-                      delay: index * 0.05,
-                      ease: [0.4, 0, 0.2, 1]
-                    }}
-                  >
-                    <Link
-                      to={link.path}
-                      className={`text-base font-medium py-2 border-b border-zinc-800 last:border-0 block ${isActive(link.path)
-                        ? 'text-white'
-                        : 'text-zinc-400 hover:text-white'
-                        }`}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-
-                <motion.div
-                  className="pt-4 flex flex-col gap-4"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{
-                    duration: 0.4,
-                    delay: navLinks.length * 0.05 + 0.1,
-                    ease: [0.4, 0, 0.2, 1]
-                  }}
-                >
-                  <a
-                    href="tel:+992920091313"
-                    className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors"
-                  >
-                    <Phone className="w-4 h-4 text-red-500" />
-                    <span>+992 (92) 009-13-13</span>
-                  </a>
-
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <HashLink
-                      smooth
-                      to="/#contacts"
-                    >
-                      <Button className="w-full bg-zinc-800 hover:bg-zinc-700 text-white border-0">
-                        Войти
-                      </Button>
-                    </HashLink>
-                  </motion.div>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </header>
 
       <main className="-mt-2" data-aos="fade" data-aos-duration="1000" data-aos-delay="200">
