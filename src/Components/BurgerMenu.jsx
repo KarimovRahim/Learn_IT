@@ -481,7 +481,7 @@ const BurgerMenu = () => {
                 </motion.a>
 
                 {/* Индикатор темы с креативной анимацией текста - ВАРИАНТ 1: Печатная машинка */}
-                <motion.div 
+                {/* <motion.div 
                   variants={itemVariants}
                   onClick={handleThemeToggle}
                   whileHover={{ scale: 1.02 }}
@@ -490,7 +490,7 @@ const BurgerMenu = () => {
                     isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
                   }`}
                 >
-                  {/* Анимированный фоновый градиент при переключении */}
+                  // Анимированный фоновый градиент при переключении
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-red-600/20 to-red-700/20"
                     initial={{ x: '-100%' }}
@@ -500,7 +500,7 @@ const BurgerMenu = () => {
                     }}
                   />
                   
-                  {/* Эффект пульсации при переключении */}
+                  // Эффект пульсации при переключении
                   <motion.div 
                     className="absolute inset-0 bg-red-500/10"
                     animate={{ 
@@ -539,7 +539,7 @@ const BurgerMenu = () => {
                       }}
                       className="flex items-center gap-2 relative z-10"
                     >
-                      {/* Контейнер для иконки с анимацией */}
+                      // Контейнер для иконки с анимацией
                       <motion.div
                         animate={{ 
                           rotate: [0, 10, -10, 0],
@@ -557,14 +557,14 @@ const BurgerMenu = () => {
                         )}
                       </motion.div>
                       
-                      {/* ВАРИАНТ 1: Анимация "печатная машинка" */}
+                      // ВАРИАНТ 1: Анимация "печатная машинка"
                       <div className="relative overflow-hidden">
-                        {/* Основной текст (невидимый, для сохранения места) */}
+                        // Основной текст (невидимый, для сохранения места)
                         <div className="opacity-0">
                           {isDark ? 'Тёмная тема' : 'Светлая тема'}
                         </div>
                         
-                        {/* Анимированный текст с эффектом печатной машинки */}
+                        // Анимированный текст с эффектом печатной машинки
                         <motion.div
                           className="absolute inset-0 flex items-center"
                           initial={{ width: 0 }}
@@ -587,8 +587,8 @@ const BurgerMenu = () => {
                     </motion.div>
                   </AnimatePresence>
 
-                  {/* Эффект "волны" при клике */}
-                  {/* <motion.div 
+                  // </div> Эффект "волны" при клике
+                  <motion.div 
                     className="absolute inset-0 pointer-events-none"
                     initial={{ scale: 0, opacity: 0.5 }}
                     whileTap={{ scale: 2, opacity: 0 }}
