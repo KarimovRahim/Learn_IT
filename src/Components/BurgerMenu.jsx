@@ -283,7 +283,8 @@ const BurgerMenu = () => {
                 </div>
               </motion.a>
 
-              {/* Кнопка входа с анимацией */}
+              {/*
+              // Кнопка входа с анимацией
               <HashLink
                 smooth
                 to="/#contacts"
@@ -296,7 +297,7 @@ const BurgerMenu = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-100 group-hover:opacity-90 transition-opacity" />
                   
-                  {/* Анимированная волна при наведении */}
+                  // Анимированная волна при наведении
                   <motion.div 
                     className="absolute inset-0 bg-white/20"
                     initial={{ y: '100%' }}
@@ -314,7 +315,7 @@ const BurgerMenu = () => {
                     <span className="text-sm font-medium">Связаться</span>
                   </div>
                 </motion.button>
-              </HashLink>
+              </HashLink> */}
             </div>
 
             {/* Нижний декоративный элемент */}
@@ -324,7 +325,7 @@ const BurgerMenu = () => {
               transition={{ duration: 0.5, delay: 0.7 }}
               className="mt-4 text-center"
             >
-              <span className="text-[10px] text-zinc-600">© 2024 Learn IT. Все права защищены</span>
+              <span className="text-[10px] text-zinc-600">© 2026 Learn IT. Все права защищены</span>
             </motion.div>
           </motion.div>
         </div>
