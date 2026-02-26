@@ -66,7 +66,7 @@ const BurgerMenu = () => {
       {/* Кнопка бургера */}
       <button
         onClick={toggleMenu}
-        className="md:hidden relative z-50 p-2 text-white hover:text-red-500 transition-colors duration-300"
+        className="md:hidden relative z-[60] p-2 text-white hover:text-red-500 transition-colors duration-300"
         aria-label="Меню"
       >
         <motion.div
@@ -77,7 +77,7 @@ const BurgerMenu = () => {
         </motion.div>
       </button>
 
-      {/* Оверлей */}
+      {/* Оверлей с blur эффектом */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -85,7 +85,7 @@ const BurgerMenu = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-zinc-950/80 backdrop-blur-sm z-40 md:hidden"
+            className="fixed inset-0 bg-zinc-950/60 backdrop-blur-md z-[70] md:hidden"
             onClick={closeMenu}
           />
         )}
@@ -100,11 +100,11 @@ const BurgerMenu = () => {
             exit={{ opacity: 0, x: '100%' }}
             transition={{
               type: 'spring',
-              damping: 25,
-              stiffness: 200,
-              duration: 0.4
+              damping: 30,
+              stiffness: 300,
+              duration: 0.3
             }}
-            className="fixed top-0 right-0 h-full w-full max-w-sm bg-zinc-900 border-l border-zinc-800 shadow-2xl z-50 md:hidden overflow-y-auto"
+            className="fixed top-[73px] right-0 h-[calc(100vh-73px)] w-full max-w-sm bg-zinc-900 border-l border-zinc-800 shadow-2xl z-[80] md:hidden overflow-y-auto"
           >
             {/* Шапка меню */}
             <div className="sticky top-0 bg-zinc-900/95 backdrop-blur-sm border-b border-zinc-800 p-6">
@@ -119,14 +119,6 @@ const BurgerMenu = () => {
                   </div>
                   <span className="text-xl font-bold text-white tracking-tight">Learn IT</span>
                 </Link>
-
-                <button
-                  onClick={closeMenu}
-                  className="p-2 text-zinc-400 hover:text-red-500 transition-colors"
-                  aria-label="Закрыть меню"
-                >
-                  <X className="w-6 h-6" />
-                </button>
               </div>
 
               {/* Поиск */}
@@ -137,7 +129,7 @@ const BurgerMenu = () => {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Поиск..."
-                    className="w-full px-4 py-3 pl-11 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-red-600 transition-colors"
+                    className="w-full px-4 py-3 pl-11 bg-zinc-800/50 border border-zinc-700 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all"
                   />
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
                   <button
