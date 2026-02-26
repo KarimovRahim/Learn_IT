@@ -6,7 +6,7 @@ import Button from '../Components/UI/Button.jsx'
 import { motion } from 'framer-motion'
 import Switch from '../Components/swintcher.jsx'
 import Footer from '../Components/Footer/Footer.jsx'
-import BurgerMenu from '../Components/BurgerMenu.jsx'
+import BurgerMenu from '../Components/BurgerMenu.jsx' // Импорт тот же
 import AOS from 'aos'
 import 'aos/dist/aos.css'
 
@@ -78,7 +78,7 @@ const Layout = () => {
   return (
     <div className="min-h-screen bg-zinc-950 font-sans selection-red">
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
           ? 'backdrop-blur-md border-b border-zinc-800 bg-zinc-950/80 py-3'
           : 'bg-transparent py-5'
           }`}
@@ -153,7 +153,7 @@ const Layout = () => {
               </HashLink>
             </div>
 
-            {/* Заменяем старый бургер на новый компонент */}
+            {/* BurgerMenu теперь рендерит только кнопку, меню уходит в портал */}
             <BurgerMenu />
           </div>
         </div>

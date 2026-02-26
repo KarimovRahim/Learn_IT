@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import { 
@@ -8,23 +9,36 @@ import {
 
 const BurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const location = useLocation();
 
+  // Монтируем портал только на клиенте
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
+
+  // Блокировка скролла при открытом меню
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none'; // Для мобильных устройств
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     }
     
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
     };
   }, [isOpen]);
 
   // Закрываем меню при изменении маршрута
   useEffect(() => {
-    closeMenu();
+    if (isOpen) {
+      closeMenu();
+    }
   }, [location.pathname]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -41,40 +55,46 @@ const BurgerMenu = () => {
     { name: 'Контакты', path: '/contacts', icon: Mail, description: 'Свяжитесь с нами' },
   ];
 
-  return (
-    <>
-      {/* Кнопка бургера с анимацией */}
-      <button
-        onClick={toggleMenu}
-        className="md:hidden relative z-50 w-10 h-10 flex items-center justify-center text-white hover:text-red-500 transition-all duration-300 group"
-        aria-label="Меню"
-      >
-        <div className={`absolute inset-0 rounded-lg bg-white/5 group-hover:bg-white/10 transition-all duration-300 ${isOpen ? 'scale-110 opacity-100' : 'scale-0 opacity-0'}`} />
-        {isOpen ? (
-          <X size={24} className="transform transition-transform duration-300 rotate-0 hover:rotate-90" />
-        ) : (
-          <Menu size={24} className="transform transition-transform duration-300 hover:scale-110" />
-        )}
-      </button>
+  // Кнопка бургера (остаётся в header)
+  const burgerButton = (
+    <button
+      onClick={toggleMenu}
+      className="md:hidden relative w-10 h-10 flex items-center justify-center text-white hover:text-red-500 transition-all duration-300 group z-50"
+      aria-label="Меню"
+      aria-expanded={isOpen}
+    >
+      <div className={`absolute inset-0 rounded-lg bg-white/5 group-hover:bg-white/10 transition-all duration-300 ${isOpen ? 'scale-110 opacity-100' : 'scale-0 opacity-0'}`} />
+      {isOpen ? (
+        <X size={24} className="transform transition-transform duration-300 rotate-0 hover:rotate-90" />
+      ) : (
+        <Menu size={24} className="transform transition-transform duration-300 hover:scale-110" />
+      )}
+    </button>
+  );
 
-      {/* Затемнение фона с анимацией */}
+  // Меню и overlay рендерятся через портал
+  const menuContent = isOpen && (
+    <>
+      {/* Overlay с затемнением - z-[999] */}
       <div 
-        className={`fixed inset-0 bg-black/60 backdrop-blur-md z-40 md:hidden transition-all duration-500 ${
-          isOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-        }`}
+        className="fixed inset-0 bg-black/60 backdrop-blur-md z-[999] md:hidden"
         onClick={closeMenu}
+        aria-hidden="true"
       />
 
-      {/* Меню с красивым дизайном */}
+      {/* Меню - z-[1000] */}
       <div 
-        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-gradient-to-b from-zinc-900 to-zinc-950 z-50 md:hidden shadow-2xl transition-all duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] ${
+        className={`fixed top-0 right-0 h-full w-[280px] sm:w-[320px] bg-gradient-to-b from-zinc-900 to-zinc-950 z-[1000] md:hidden shadow-2xl transition-transform duration-500 ease-[cubic-bezier(0.68,-0.55,0.265,1.55)] ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Мобильное меню"
       >
         {/* Декоративный элемент сверху */}
         <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-700" />
         
-        {/* Шапка с логотипом и градиентом */}
+        {/* Шапка с логотипом */}
         <div className="relative bg-gradient-to-b from-zinc-800/50 to-transparent p-6 pb-8">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -94,7 +114,7 @@ const BurgerMenu = () => {
         </div>
 
         {/* Навигация */}
-        <nav className="p-4">
+        <nav className="p-4 overflow-y-auto max-h-[calc(100vh-280px)]">
           <ul className="space-y-1">
             {navLinks.map((link, index) => {
               const Icon = link.icon;
@@ -158,7 +178,7 @@ const BurgerMenu = () => {
         {/* Контакты и кнопка входа */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-zinc-900 via-zinc-900 to-transparent pt-8 pb-6 px-4">
           <div className="space-y-3">
-            {/* Телефон с эффектом */}
+            {/* Телефон */}
             <a
               href="tel:+992920091313"
               className="relative flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-400 hover:text-white transition-all duration-300 group overflow-hidden"
@@ -173,20 +193,15 @@ const BurgerMenu = () => {
               </div>
             </a>
 
-            {/* Кнопка входа с красивым дизайном */}
+            {/* Кнопка входа */}
             <HashLink
               smooth
               to="/#contacts"
               onClick={closeMenu}
             >
               <button className="relative w-full group overflow-hidden rounded-xl">
-                {/* Градиентный фон */}
                 <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-100 group-hover:opacity-90 transition-opacity" />
-                
-                {/* Эффект свечения при наведении */}
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                
-                {/* Контент кнопки */}
                 <div className="relative flex items-center justify-center gap-2 py-3 px-4">
                   <LogIn size={18} className="group-hover:translate-x-1 transition-transform" />
                   <span className="text-sm font-medium">Войти в аккаунт</span>
@@ -201,6 +216,13 @@ const BurgerMenu = () => {
           </div>
         </div>
       </div>
+    </>
+  );
+
+  return (
+    <>
+      {burgerButton}
+      {mounted && createPortal(menuContent, document.body)}
     </>
   );
 };
