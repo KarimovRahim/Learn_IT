@@ -209,7 +209,7 @@ const BurgerMenu = () => {
               </div>
 
               {/* Улучшенный поиск */}
-              <motion.form 
+              {/* <motion.form 
                 onSubmit={handleSearch} 
                 className="mt-6"
                 initial={{ y: 20, opacity: 0 }}
@@ -232,7 +232,7 @@ const BurgerMenu = () => {
                     <Search className="w-4 h-4" />
                   </button>
                 </div>
-              </motion.form>
+              </motion.form> */}
             </div>
 
             {/* Улучшенная навигация */}
