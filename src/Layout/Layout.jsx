@@ -6,9 +6,10 @@ import Button from '../Components/UI/Button.jsx'
 import { motion } from 'framer-motion'
 import Switch from '../Components/swintcher.jsx'
 import Footer from '../Components/Footer/Footer.jsx'
-import BurgerMenu from '../Components/BurgerMenu.jsx' // Импорт тот же
+import BurgerMenu from '../Components/BurgerMenu.jsx'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
+import log from '../assets/log.png'; // Импорт логотипа
 
 const Layout = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -97,8 +98,13 @@ const Layout = () => {
             data-aos-delay="200"
             data-aos-easing="ease-out-cubic"
           >
-            <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center text-white font-bold">
-              IT
+            {/* Логотип с изображением вместо текста */}
+            <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center shadow-lg overflow-hidden">
+              <img 
+                src={log} 
+                alt="Learn IT Logo" 
+                className="w-5 h-5 object-contain"
+              />
             </div>
             <span className="text-xl font-bold text-white tracking-tight">Learn IT</span>
           </Link>

@@ -3,10 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
-import {
-  Menu, X, Phone, Home, BookOpen, Settings,
+import { 
+  Menu, X, Phone, Home, BookOpen, Settings, 
   Newspaper, Info, Mail, ChevronRight, LogIn, Sun, Moon
 } from 'lucide-react';
+import log from '../assets/log.png'; // Импорт изображения
 
 const BurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,22 +19,22 @@ const BurgerMenu = () => {
   // Монтируем портал только на клиенте
   useEffect(() => {
     setMounted(true);
-
+    
     // Проверяем тему при монтировании
     const checkTheme = () => {
       const isDarkTheme = document.documentElement.classList.contains('dark');
       setIsDark(isDarkTheme);
     };
-
+    
     checkTheme();
-
+    
     // Наблюдаем за изменениями темы
     const observer = new MutationObserver(checkTheme);
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ['class']
     });
-
+    
     return () => {
       setMounted(false);
       observer.disconnect();
@@ -52,7 +53,7 @@ const BurgerMenu = () => {
       const timer = setTimeout(() => setShouldRender(false), 500);
       return () => clearTimeout(timer);
     }
-
+    
     return () => {
       document.body.style.overflow = '';
       document.body.style.touchAction = '';
@@ -99,8 +100,8 @@ const BurgerMenu = () => {
 
   const itemVariants = {
     hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
+    visible: { 
+      y: 0, 
       opacity: 1,
       transition: {
         type: "spring",
@@ -108,8 +109,8 @@ const BurgerMenu = () => {
         damping: 24
       }
     },
-    exit: {
-      y: -20,
+    exit: { 
+      y: -20, 
       opacity: 0,
       transition: {
         duration: 0.2
@@ -119,8 +120,8 @@ const BurgerMenu = () => {
 
   const logoVariants = {
     hidden: { scale: 0, rotate: -180 },
-    visible: {
-      scale: 1,
+    visible: { 
+      scale: 1, 
       rotate: 0,
       transition: {
         type: "spring",
@@ -129,8 +130,8 @@ const BurgerMenu = () => {
         delay: 0.2
       }
     },
-    exit: {
-      scale: 0,
+    exit: { 
+      scale: 0, 
       rotate: 180,
       transition: {
         duration: 0.3
@@ -140,14 +141,14 @@ const BurgerMenu = () => {
 
   const lineVariants = {
     hidden: { scaleX: 0 },
-    visible: {
+    visible: { 
       scaleX: 1,
       transition: {
         duration: 0.5,
         delay: 0.1
       }
     },
-    exit: {
+    exit: { 
       scaleX: 0,
       transition: {
         duration: 0.3
@@ -157,13 +158,13 @@ const BurgerMenu = () => {
 
   const gradientVariants = {
     hidden: { opacity: 0 },
-    visible: {
+    visible: { 
       opacity: isDark ? 0.5 : 0.3,
       transition: {
         duration: 0.5
       }
     },
-    exit: {
+    exit: { 
       opacity: 0,
       transition: {
         duration: 0.3
@@ -180,22 +181,24 @@ const BurgerMenu = () => {
       aria-expanded={isOpen}
     >
       <div className={`absolute inset-0 rounded-lg bg-black/5 dark:bg-white/5 group-hover:bg-black/10 dark:group-hover:bg-white/10 transition-all duration-300 ${isOpen ? 'scale-110 opacity-100' : 'scale-0 opacity-0'}`} />
-
+      
       {/* Анимированная иконка */}
       <div className="relative w-6 h-6">
-        <X
-          size={24}
-          className={`absolute inset-0 transform transition-all duration-500 ${isOpen
-              ? 'rotate-0 opacity-100 scale-100'
+        <X 
+          size={24} 
+          className={`absolute inset-0 transform transition-all duration-500 ${
+            isOpen 
+              ? 'rotate-0 opacity-100 scale-100' 
               : 'rotate-90 opacity-0 scale-50'
-            }`}
+          }`} 
         />
-        <Menu
-          size={24}
-          className={`absolute inset-0 transform transition-all duration-500 ${isOpen
-              ? '-rotate-90 opacity-0 scale-50'
+        <Menu 
+          size={24} 
+          className={`absolute inset-0 transform transition-all duration-500 ${
+            isOpen 
+              ? '-rotate-90 opacity-0 scale-50' 
               : 'rotate-0 opacity-100 scale-100'
-            }`}
+          }`} 
         />
       </div>
     </button>
@@ -205,27 +208,28 @@ const BurgerMenu = () => {
   const menuContent = shouldRender && (
     <>
       {/* Overlay с анимацией появления/исчезновения - адаптирован под тему */}
-      <motion.div
+      <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: isOpen ? 1 : 0 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className={`fixed inset-0 z-[999] md:hidden ${isDark
-            ? 'bg-black/60 backdrop-blur-md'
+        className={`fixed inset-0 z-[999] md:hidden ${
+          isDark 
+            ? 'bg-black/60 backdrop-blur-md' 
             : 'bg-black/40 backdrop-blur-sm'
-          }`}
+        }`}
         onClick={closeMenu}
         aria-hidden="true"
       />
 
       {/* Меню с комплексной анимацией */}
-      <motion.div
+      <motion.div 
         initial={{ x: '100%' }}
         animate={{ x: isOpen ? 0 : '100%' }}
         exit={{ x: '100%' }}
-        transition={{
-          type: "spring",
-          damping: 25,
+        transition={{ 
+          type: "spring", 
+          damping: 25, 
           stiffness: 200,
           duration: 0.5
         }}
@@ -235,32 +239,34 @@ const BurgerMenu = () => {
         aria-label="Мобильное меню"
       >
         {/* Контейнер меню с адаптивными цветами */}
-        <div className={`relative h-full shadow-2xl overflow-hidden ${isDark
+        <div className={`relative h-full shadow-2xl overflow-hidden ${
+          isDark
             ? 'bg-gradient-to-b from-zinc-900 to-zinc-950'
             : 'bg-gradient-to-b from-white to-gray-50'
-          }`}>
-
+        }`}>
+          
           {/* Анимированная линия сверху */}
-          <motion.div
+          <motion.div 
             variants={lineVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
             className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-red-500 via-red-600 to-red-700 origin-left"
           />
-
+          
           {/* Анимированный градиентный фон */}
-          <motion.div
+          <motion.div 
             variants={gradientVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] ${isDark
+            className={`absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] ${
+              isDark
                 ? 'from-red-600/20 via-transparent to-transparent'
                 : 'from-red-500/10 via-transparent to-transparent'
-              }`}
+            }`}
           />
-
+          
           {/* Главный контейнер с анимацией появления */}
           <motion.div
             variants={containerVariants}
@@ -270,38 +276,47 @@ const BurgerMenu = () => {
             className="h-full flex flex-col"
           >
             {/* Шапка с логотипом */}
-            <motion.div
+            <motion.div 
               variants={itemVariants}
-              className={`relative bg-gradient-to-b p-6 pb-8 ${isDark
+              className={`relative bg-gradient-to-b p-6 pb-8 ${
+                isDark
                   ? 'from-zinc-800/50 to-transparent'
                   : 'from-gray-100/50 to-transparent'
-                }`}
+              }`}
             >
               <div className="flex items-center gap-3">
-                <motion.div
+                <motion.div 
                   variants={logoVariants}
                   className="relative"
                 >
-                  <div className={`absolute inset-0 rounded-lg blur-sm opacity-50 animate-pulse ${isDark ? 'bg-red-600' : 'bg-red-500'
-                    }`} />
-                  <div className="relative w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-lg">
-                    IT
+                  <div className={`absolute inset-0 rounded-lg blur-sm opacity-50 animate-pulse ${
+                    isDark ? 'bg-red-600' : 'bg-red-500'
+                  }`} />
+                  {/* Логотип с изображением вместо текста */}
+                  <div className="relative w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
+                    <img 
+                      src={log} 
+                      alt="Learn IT Logo" 
+                      className="w-6 h-6 object-contain"
+                    />
                   </div>
                 </motion.div>
                 <motion.div variants={itemVariants}>
-                  <span className={`text-lg font-bold block ${isDark ? 'text-white' : 'text-gray-900'
-                    }`}>
+                  <span className={`text-lg font-bold block ${
+                    isDark ? 'text-white' : 'text-gray-900'
+                  }`}>
                     Learn IT
                   </span>
-                  <span className={`text-xs ${isDark ? 'text-zinc-400' : 'text-gray-500'
-                    }`}>
+                  <span className={`text-xs ${
+                    isDark ? 'text-zinc-400' : 'text-gray-500'
+                  }`}>
                     Образовательный центр
                   </span>
                 </motion.div>
               </div>
-
+              
               {/* Декоративная линия */}
-              <motion.div
+              <motion.div 
                 variants={lineVariants}
                 className="absolute bottom-4 left-6 right-6 h-px bg-gradient-to-r from-transparent via-red-500/50 to-transparent origin-left"
               />
@@ -309,16 +324,16 @@ const BurgerMenu = () => {
 
             {/* Навигация */}
             <nav className="flex-1 p-4 overflow-y-auto">
-              <motion.ul
+              <motion.ul 
                 variants={containerVariants}
                 className="space-y-1"
               >
                 {navLinks.map((link, index) => {
                   const Icon = link.icon;
                   const active = isActive(link.path);
-
+                  
                   return (
-                    <motion.li
+                    <motion.li 
                       key={link.path}
                       variants={itemVariants}
                       custom={index}
@@ -328,19 +343,20 @@ const BurgerMenu = () => {
                       <Link
                         to={link.path}
                         onClick={closeMenu}
-                        className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${active
+                        className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group ${
+                          active
                             ? isDark
                               ? 'bg-gradient-to-r from-red-600/20 to-red-600/5 text-red-500'
                               : 'bg-gradient-to-r from-red-500/10 to-red-500/5 text-red-600'
                             : isDark
                               ? 'text-zinc-400 hover:bg-zinc-800/50 hover:text-white'
                               : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                          }`}
+                        }`}
                       >
                         {/* Индикатор активного пункта */}
                         <AnimatePresence>
                           {active && (
-                            <motion.div
+                            <motion.div 
                               initial={{ height: 0, opacity: 0 }}
                               animate={{ height: 32, opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
@@ -349,54 +365,57 @@ const BurgerMenu = () => {
                             />
                           )}
                         </AnimatePresence>
-
+                        
                         {/* Иконка */}
-                        <motion.div
+                        <motion.div 
                           whileHover={{ scale: 1.1, rotate: 5 }}
-                          className={`relative p-2 rounded-lg transition-all duration-300 ${active
+                          className={`relative p-2 rounded-lg transition-all duration-300 ${
+                            active
                               ? isDark
                                 ? 'bg-red-600/20 text-red-500'
                                 : 'bg-red-500/10 text-red-600'
                               : isDark
                                 ? 'bg-zinc-800/50 text-zinc-500 group-hover:bg-zinc-800 group-hover:text-white'
                                 : 'bg-gray-100 text-gray-500 group-hover:bg-gray-200 group-hover:text-gray-700'
-                            }`}
+                          }`}
                         >
                           <Icon size={18} />
                         </motion.div>
-
+                        
                         {/* Текст */}
                         <div className="flex-1">
-                          <motion.span
-                            className={`text-sm font-medium block ${active
+                          <motion.span 
+                            className={`text-sm font-medium block ${
+                              active
                                 ? isDark ? 'text-red-500' : 'text-red-600'
                                 : isDark ? 'text-zinc-400 group-hover:text-white' : 'text-gray-600 group-hover:text-gray-900'
-                              }`}
+                            }`}
                           >
                             {link.name}
                           </motion.span>
-                          <motion.span
-                            className={`text-xs transition-colors ${isDark
-                                ? 'text-zinc-500 group-hover:text-zinc-400'
+                          <motion.span 
+                            className={`text-xs transition-colors ${
+                              isDark 
+                                ? 'text-zinc-500 group-hover:text-zinc-400' 
                                 : 'text-gray-500 group-hover:text-gray-600'
-                              }`}
+                            }`}
                           >
                             {link.description}
                           </motion.span>
                         </div>
-
+                        
                         {/* Анимированная стрелка */}
                         <motion.div
                           initial={{ x: -10, opacity: 0 }}
                           whileHover={{ x: 0, opacity: 1 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <ChevronRight
-                            size={16}
-                            className={active
+                          <ChevronRight 
+                            size={16} 
+                            className={active 
                               ? isDark ? 'text-red-500' : 'text-red-600'
                               : isDark ? 'text-zinc-500' : 'text-gray-400'
-                            }
+                            } 
                           />
                         </motion.div>
                       </Link>
@@ -407,23 +426,59 @@ const BurgerMenu = () => {
             </nav>
 
             {/* Контакты и кнопка входа */}
-            <motion.div
+            <motion.div 
               variants={itemVariants}
-              className={`bg-gradient-to-t pt-8 pb-6 px-4 ${isDark
+              className={`bg-gradient-to-t pt-8 pb-6 px-4 ${
+                isDark
                   ? 'from-zinc-900 via-zinc-900 to-transparent'
                   : 'from-white via-white to-transparent border-t border-gray-200'
-                }`}
+              }`}
             >
-              <motion.div
+              <motion.div 
                 variants={containerVariants}
                 className="space-y-3"
               >
+                {/* Телефон */}
+                <motion.a
+                  variants={itemVariants}
+                  href="tel:+992920091313"
+                  whileHover={{ x: 5 }}
+                  className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group overflow-hidden ${
+                    isDark
+                      ? 'text-zinc-400 hover:text-white'
+                      : 'text-gray-600 hover:text-gray-900'
+                  }`}
+                >
+                  <motion.div 
+                    whileHover={{ scale: 1.1, rotate: 10 }}
+                    className={`relative p-2 rounded-lg transition-all duration-300 ${
+                      isDark
+                        ? 'bg-zinc-800 group-hover:bg-red-600/10'
+                        : 'bg-gray-100 group-hover:bg-red-500/10'
+                    }`}
+                  >
+                    <Phone size={16} className="text-red-500" />
+                  </motion.div>
+                  <div className="relative">
+                    <span className={`text-sm font-medium block ${
+                      isDark ? 'text-zinc-300' : 'text-gray-700'
+                    }`}>
+                      +992 (92) 009-13-13
+                    </span>
+                    <span className={`text-xs ${
+                      isDark ? 'text-zinc-500' : 'text-gray-500'
+                    }`}>
+                      Есть вопросы? Звоните!
+                    </span>
+                  </div>
+                </motion.a>
 
                 {/* Индикатор темы */}
-                <motion.div
+                <motion.div 
                   variants={itemVariants}
-                  className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg ${isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
-                    }`}
+                  className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg ${
+                    isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
+                  }`}
                 >
                   <AnimatePresence mode="wait">
                     <motion.div
@@ -439,8 +494,9 @@ const BurgerMenu = () => {
                       ) : (
                         <Sun size={14} className="text-red-500" />
                       )}
-                      <span className={`text-xs ${isDark ? 'text-zinc-400' : 'text-gray-600'
-                        }`}>
+                      <span className={`text-xs ${
+                        isDark ? 'text-zinc-400' : 'text-gray-600'
+                      }`}>
                         {isDark ? 'Тёмная тема активна' : 'Светлая тема активна'}
                       </span>
                     </motion.div>
@@ -448,44 +504,14 @@ const BurgerMenu = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Телефон */}
-              <motion.a
-                variants={itemVariants}
-                href="tel:+992920091313"
-                whileHover={{ x: 5 }}
-                className={`relative flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group overflow-hidden ${isDark
-                    ? 'text-zinc-400 hover:text-white'
-                    : 'text-gray-600 hover:text-gray-900'
-                  }`}
-              >
-                <motion.div
-                  whileHover={{ scale: 1.1, rotate: 10 }}
-                  className={`relative p-2 rounded-lg transition-all duration-300 ${isDark
-                      ? 'bg-zinc-800 group-hover:bg-red-600/10'
-                      : 'bg-gray-100 group-hover:bg-red-500/10'
-                    }`}
-                >
-                  <Phone size={16} className="text-red-500" />
-                </motion.div>
-                <div className="relative">
-                  <span className={`text-sm font-medium block ${isDark ? 'text-zinc-300' : 'text-gray-700'
-                    }`}>
-                    +992 (92) 009-13-13
-                  </span>
-                  <span className={`text-xs ${isDark ? 'text-zinc-500' : 'text-gray-500'
-                    }`}>
-                    Есть вопросы? Звоните!
-                  </span>
-                </div>
-              </motion.a>
-
               {/* Нижний декоративный элемент */}
-              <motion.div
+              <motion.div 
                 variants={itemVariants}
                 className="mt-4 text-center"
               >
-                <span className={`text-[10px] ${isDark ? 'text-zinc-600' : 'text-gray-400'
-                  }`}>
+                <span className={`text-[10px] ${
+                  isDark ? 'text-zinc-600' : 'text-gray-400'
+                }`}>
                   © 2026 Learn IT. Все права защищены
                 </span>
               </motion.div>
@@ -502,7 +528,7 @@ const BurgerMenu = () => {
       {mounted && createPortal(
         <AnimatePresence mode="wait">
           {menuContent}
-        </AnimatePresence>,
+        </AnimatePresence>, 
         document.body
       )}
     </>
