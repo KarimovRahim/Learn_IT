@@ -4,12 +4,12 @@ import { HashLink } from 'react-router-hash-link';
 import { Phone } from 'lucide-react'
 import Button from '../Components/UI/Button.jsx'
 import { motion } from 'framer-motion'
-import Switch from '../Components/swintcher.jsx' // Импорт вашего Switch
+import Switch from '../Components/swintcher.jsx'
 import Footer from '../Components/Footer/Footer.jsx'
 import BurgerMenu from '../Components/BurgerMenu.jsx'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import log from '../assets/log.png';
+import log from '../assets/log.png'; // Импорт логотипа
 
 const Layout = () => {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -43,39 +43,20 @@ const Layout = () => {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Инициализация темы при загрузке
   useEffect(() => {
     const userTheme = localStorage.getItem('theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
-    const isDarkTheme = userTheme === 'dark' || (!userTheme && systemPrefersDark);
+    const isDarkTheme =
+      userTheme === 'dark' ||
+      (!userTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-    // Устанавливаем класс на HTML
     if (isDarkTheme) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
 
-    // Устанавливаем состояние
     setIsDark(isDarkTheme);
-  }, []);
-
-  // Синхронизация с изменениями темы в системе
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    const handleChange = (e) => {
-      // Меняем тему только если пользователь не установил свою
-      if (!localStorage.getItem('theme')) {
-        const newTheme = e.matches;
-        setIsDark(newTheme);
-        document.documentElement.classList.toggle('dark', newTheme);
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   const handleToggle = () => {
@@ -96,13 +77,12 @@ const Layout = () => {
   const isActive = (path) => location.pathname === path
 
   return (
-    <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans selection-red transition-colors duration-300">
+    <div className="min-h-screen bg-zinc-950 font-sans selection-red">
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled
-            ? 'backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 py-3'
-            : 'bg-transparent py-5'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
+          ? 'backdrop-blur-md border-b border-zinc-800 bg-zinc-950/80 py-3'
+          : 'bg-transparent py-5'
+          }`}
         data-aos="fade-down"
         data-aos-duration="600"
         data-aos-easing="ease-out-quad"
@@ -118,7 +98,7 @@ const Layout = () => {
             data-aos-delay="200"
             data-aos-easing="ease-out-cubic"
           >
-            {/* Логотип с изображением */}
+            {/* Логотип с изображением вместо текста */}
             <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center shadow-lg overflow-hidden">
               <img 
                 src={log} 
@@ -126,9 +106,7 @@ const Layout = () => {
                 className="w-5 h-5 object-contain"
               />
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
-              Learn IT
-            </span>
+            <span className="text-xl font-bold text-white tracking-tight">Learn IT</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -136,11 +114,10 @@ const Layout = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-medium transition-colors ${
-                  isActive(link.path)
-                    ? 'text-red-600 dark:text-white border-b-2 border-red-500 pb-1'
-                    : 'text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white'
-                }`}
+                className={`text-sm font-medium transition-colors ${isActive(link.path)
+                  ? 'text-white border-b-2 border-red-500 pb-1'
+                  : 'text-zinc-400 hover:text-white'
+                  }`}
                 data-aos="fade-down"
                 data-aos-duration="500"
                 data-aos-delay={300 + index * 100}
@@ -152,16 +129,11 @@ const Layout = () => {
           </nav>
 
           <div className="flex items-center gap-6" data-aos="fade-left" data-aos-duration="700" data-aos-delay="600">
-            {/* Switch с правильным состоянием */}
-            <Switch 
-              darkChecked={isDark} 
-              darkOnchange={handleToggle} 
-            />
-            
+            <Switch darkChecked={isDark} darkOnchange={handleToggle} />
             <div className="hidden md:flex items-center gap-6">
               <a
                 href="tel:+992920091313"
-                className="flex items-center gap-2 text-gray-600 dark:text-zinc-400 hover:text-gray-900 dark:hover:text-white transition-colors group"
+                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
                 data-aos="fade-left"
                 data-aos-duration="600"
                 data-aos-delay="700"
@@ -170,7 +142,10 @@ const Layout = () => {
                 <Phone className="w-4 h-4 text-red-500 group-hover:text-red-400" />
                 <span className="text-sm font-medium">+992 (92) 009-13-13</span>
               </a>
-              <HashLink smooth to="/#contacts">
+              <HashLink
+                smooth
+                to="/#contacts"
+              >
                 <Button
                   variant="primary"
                   size="sm"
@@ -184,6 +159,7 @@ const Layout = () => {
               </HashLink>
             </div>
 
+            {/* BurgerMenu теперь рендерит только кнопку, меню уходит в портал */}
             <BurgerMenu />
           </div>
         </div>

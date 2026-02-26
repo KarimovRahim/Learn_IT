@@ -2,18 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 
 const Switch = ({ darkChecked, darkOnchange }) => {
-  const handleChange = (e) => {
-    // Вызываем функцию переключения темы
-    darkOnchange();
-  };
-
   return (
     <StyledWrapper>
       <label className="switch">
         <input
           type="checkbox"
           checked={darkChecked}
-          onChange={handleChange}
+          onChange={darkOnchange}
         />
         <span className="slider" />
       </label>
@@ -66,7 +61,8 @@ const StyledWrapper = styled.div`
     top: 50%;
     transform: translateY(-50%);
     background: linear-gradient(40deg,#ff0080,#ff8c00 70%);
-    transition: .4s;
+    ;
+   transition: .4s;
   }
 
   input:checked + .slider {
@@ -78,7 +74,6 @@ const StyledWrapper = styled.div`
     background: #303136;
     /* change the value of second inset in box-shadow to change the angle and direction of the moon  */
     box-shadow: inset -3px -2px 5px -2px #8983f7, inset -10px -4px 0 0 #a3dafb;
-  }
-`;
+  }`;
 
 export default Switch;
