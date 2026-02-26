@@ -480,7 +480,7 @@ const BurgerMenu = () => {
                   </div>
                 </motion.a>
 
-                {/* Индикатор темы с красивой анимацией */}
+                {/* Индикатор темы с креативной анимацией текста - ВАРИАНТ 1: Печатная машинка */}
                 <motion.div 
                   variants={itemVariants}
                   onClick={handleThemeToggle}
@@ -557,18 +557,33 @@ const BurgerMenu = () => {
                         )}
                       </motion.div>
                       
-                      {/* Текст с анимацией появления */}
-                      <motion.span 
-                        className={`text-xs ${
-                          isDark ? 'text-zinc-400' : 'text-gray-600'
-                        }`}
-                        initial={{ x: -10, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        exit={{ x: 10, opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        {isDark ? 'Тёмная тема' : 'Светлая тема'}
-                      </motion.span>
+                      {/* ВАРИАНТ 1: Анимация "печатная машинка" */}
+                      <div className="relative overflow-hidden">
+                        {/* Основной текст (невидимый, для сохранения места) */}
+                        <div className="opacity-0">
+                          {isDark ? 'Тёмная тема' : 'Светлая тема'}
+                        </div>
+                        
+                        {/* Анимированный текст с эффектом печатной машинки */}
+                        <motion.div
+                          className="absolute inset-0 flex items-center"
+                          initial={{ width: 0 }}
+                          animate={{ width: '100%' }}
+                          exit={{ width: 0 }}
+                          transition={{ duration: 0.4, ease: "easeInOut" }}
+                          style={{
+                            whiteSpace: 'nowrap',
+                            overflow: 'hidden',
+                            borderRight: '2px solid rgba(239, 68, 68, 0.5)'
+                          }}
+                        >
+                          <span className={`text-xs ${
+                            isDark ? 'text-zinc-400' : 'text-gray-600'
+                          }`}>
+                            {isDark ? 'Тёмная тема' : 'Светлая тема'}
+                          </span>
+                        </motion.div>
+                      </div>
                     </motion.div>
                   </AnimatePresence>
 
@@ -585,6 +600,270 @@ const BurgerMenu = () => {
                     }}
                   />
                 </motion.div>
+
+                {/* ВАРИАНТ 2: Анимация "распадающиеся буквы" - раскомментируйте для использования */}
+                {/* <motion.div 
+                  variants={itemVariants}
+                  onClick={handleThemeToggle}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative cursor-pointer overflow-hidden flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 ${
+                    isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
+                  }`}
+                >
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-red-600/20 to-red-700/20"
+                    initial={{ x: '-100%' }}
+                    animate={{ 
+                      x: isDark ? '-100%' : '100%',
+                      transition: { duration: 0.5, ease: "easeInOut" }
+                    }}
+                  />
+                  
+                  <motion.div 
+                    className="absolute inset-0 bg-red-500/10"
+                    animate={{ 
+                      scale: [1, 1.5, 1],
+                      opacity: [0, 0.3, 0]
+                    }}
+                    transition={{ 
+                      duration: 0.8,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut"
+                    }}
+                  />
+
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isDark ? 'dark' : 'light'}
+                      initial={{ rotate: -180, scale: 0.5, opacity: 0 }}
+                      animate={{ 
+                        rotate: 0, 
+                        scale: 1, 
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 15
+                        }
+                      }}
+                      exit={{ 
+                        rotate: 180, 
+                        scale: 0.5, 
+                        opacity: 0,
+                        transition: {
+                          duration: 0.2
+                        }
+                      }}
+                      className="flex items-center gap-2 relative z-10"
+                    >
+                      <motion.div
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                        }}
+                        transition={{ 
+                          duration: 0.5,
+                          delay: 0.2,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {isDark ? (
+                          <Moon size={14} className="text-red-500" />
+                        ) : (
+                          <Sun size={14} className="text-red-500" />
+                        )}
+                      </motion.div>
+                      
+                      <div className="relative">
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={isDark ? 'dark-text' : 'light-text'}
+                            className="flex"
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            variants={{
+                              hidden: { opacity: 0 },
+                              visible: {
+                                opacity: 1,
+                                transition: {
+                                  staggerChildren: 0.03,
+                                  delayChildren: 0.1
+                                }
+                              },
+                              exit: {
+                                opacity: 0,
+                                transition: {
+                                  staggerChildren: 0.02,
+                                  staggerDirection: -1
+                                }
+                              }
+                            }}
+                          >
+                            {(isDark ? 'Тёмная тема' : 'Светлая тема').split('').map((char, index) => (
+                              <motion.span
+                                key={index}
+                                variants={{
+                                  hidden: { 
+                                    y: 20, 
+                                    opacity: 0,
+                                    rotate: 10 
+                                  },
+                                  visible: { 
+                                    y: 0, 
+                                    opacity: 1,
+                                    rotate: 0,
+                                    transition: {
+                                      type: "spring",
+                                      stiffness: 300,
+                                      damping: 15
+                                    }
+                                  },
+                                  exit: { 
+                                    y: -20, 
+                                    opacity: 0,
+                                    rotate: -10,
+                                    transition: {
+                                      duration: 0.2
+                                    }
+                                  }
+                                }}
+                                className={`inline-block text-xs ${
+                                  isDark ? 'text-zinc-400' : 'text-gray-600'
+                                }`}
+                              >
+                                {char === ' ' ? '\u00A0' : char}
+                              </motion.span>
+                            ))}
+                          </motion.div>
+                        </AnimatePresence>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  <motion.div 
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileTap={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ 
+                      background: 'radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%)',
+                      originX: 0.5,
+                      originY: 0.5
+                    }}
+                  />
+                </motion.div> */}
+
+                {/* ВАРИАНТ 3: Анимация "скролл" - раскомментируйте для использования */}
+                {/* <motion.div 
+                  variants={itemVariants}
+                  onClick={handleThemeToggle}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative cursor-pointer overflow-hidden flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 ${
+                    isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
+                  }`}
+                >
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-red-600/20 to-red-700/20"
+                    initial={{ x: '-100%' }}
+                    animate={{ 
+                      x: isDark ? '-100%' : '100%',
+                      transition: { duration: 0.5, ease: "easeInOut" }
+                    }}
+                  />
+                  
+                  <motion.div 
+                    className="absolute inset-0 bg-red-500/10"
+                    animate={{ 
+                      scale: [1, 1.5, 1],
+                      opacity: [0, 0.3, 0]
+                    }}
+                    transition={{ 
+                      duration: 0.8,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut"
+                    }}
+                  />
+
+                  <AnimatePresence mode="wait">
+                    <motion.div
+                      key={isDark ? 'dark' : 'light'}
+                      initial={{ rotate: -180, scale: 0.5, opacity: 0 }}
+                      animate={{ 
+                        rotate: 0, 
+                        scale: 1, 
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 15
+                        }
+                      }}
+                      exit={{ 
+                        rotate: 180, 
+                        scale: 0.5, 
+                        opacity: 0,
+                        transition: {
+                          duration: 0.2
+                        }
+                      }}
+                      className="flex items-center gap-2 relative z-10"
+                    >
+                      <motion.div
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                        }}
+                        transition={{ 
+                          duration: 0.5,
+                          delay: 0.2,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {isDark ? (
+                          <Moon size={14} className="text-red-500" />
+                        ) : (
+                          <Sun size={14} className="text-red-500" />
+                        )}
+                      </motion.div>
+                      
+                      <div className="relative h-5 overflow-hidden">
+                        <motion.div
+                          animate={{ 
+                            y: isDark ? 0 : -20
+                          }}
+                          transition={{ duration: 0.3 }}
+                          className="flex flex-col"
+                        >
+                          <span className={`text-xs h-5 flex items-center ${
+                            isDark ? 'text-zinc-400' : 'text-gray-600'
+                          }`}>
+                            Тёмная тема
+                          </span>
+                          <span className={`text-xs h-5 flex items-center ${
+                            isDark ? 'text-zinc-400' : 'text-gray-600'
+                          }`}>
+                            Светлая тема
+                          </span>
+                        </motion.div>
+                      </div>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  <motion.div 
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileTap={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ 
+                      background: 'radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%)',
+                      originX: 0.5,
+                      originY: 0.5
+                    }}
+                  />
+                </motion.div> */}
               </motion.div>
 
               {/* Нижний декоративный элемент */}
