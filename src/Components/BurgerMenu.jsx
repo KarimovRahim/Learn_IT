@@ -413,7 +413,7 @@ const BurgerMenu = () => {
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-red-600 to-red-700 opacity-100 group-hover:opacity-90 transition-opacity" />
                   
-                  {/* Анимированная волна при наведении */}
+                  // Анимированная волна при наведении
                   <motion.div 
                     className="absolute inset-0 bg-white/20"
                     initial={{ y: '100%' }}
