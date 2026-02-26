@@ -9,7 +9,7 @@ import Mehrdod from '../assets/mehrdod.jpg'
 import Amir from '../assets/amir.jpg'
 import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
-import CubeGrid from '../Components/CubeGrid.jsx';
+import Aurora from '../Components/Aurora.jsx';
 import { ArrowRight, Code, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
 
 const Home = () => {
@@ -110,157 +110,160 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <section
-        className="relative min-h-screen flex items-center pt-20 pb-10 overflow-hidden bg-transparent"
-        data-aos="fade"
-        data-aos-duration="1000"
+<section
+  className="relative min-h-screen flex items-center pt-20 pb-10 overflow-hidden bg-transparent"
+  data-aos="fade"
+  data-aos-duration="1000"
+>
+  {/* Фоновый градиент */}
+  <div className="absolute inset-0 z-0">
+    <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-zinc-950"></div>
+  </div>
+
+  {/* Фон с Aurora эффектом */}
+  <div className="absolute inset-0 z-1 pointer-events-none">
+    <Aurora
+      colorStops={['#4a1d5c', '#2d1b3c', '#1a142b']} // Фиолетовое сияние
+      amplitude={1.2}
+      blend={0.6}
+      speed={0.5}
+      className="opacity-60 md:opacity-80"
+    />
+    {/* Второй слой для глубины */}
+    <Aurora
+      colorStops={['#1a1a2e', '#16213e', '#0f3460']} // Синее сияние
+      amplitude={0.8}
+      blend={0.4}
+      speed={0.3}
+      className="opacity-40 md:opacity-60"
+    />
+  </div>
+
+  {/* Основной контент с колонками */}
+  <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl relative z-10">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)]">
+      {/* Левая колонка - текст */}
+      <div
+        className="order-2 lg:order-1"
+        data-aos="fade-right"
+        data-aos-duration="800"
+        data-aos-delay="200"
       >
-        {/* Фоновый градиент */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/50 to-zinc-950"></div>
+        {/* Бейдж с набором */}
+        <div
+          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="300"
+        >
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+          </span>
+          Набор на новый поток открыт
         </div>
 
-        {/* Фон с сеткой кубиков */}
-        <div className="absolute inset-0 z-1 pointer-events-none hidden md:block">
-          <CubeGrid
-            cubeSize={8}
-            gap={32}
-            proximity={120}
-            speedTrigger={60}
-            shockRadius={150}
-            shockStrength={3}
-            maxSpeed={3000}
-            resistance={500}
-            returnDuration={1.2}
-            className="w-full h-full"
+        {/* Заголовок */}
+        <h1
+          className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6"
+          data-aos="fade-up"
+          data-aos-duration="900"
+          data-aos-delay="400"
+        >
+          Добро пожаловать в <br />
+          <span className="text-red-500">
+            академию программирования
+          </span> <br />
+          <span className="text-red-500">Learn IT</span>
+        </h1>
+
+        {/* Описание */}
+        <p
+          className="text-lg md:text-xl text-zinc-400 mb-8 max-w-2xl leading-relaxed"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="500"
+        >
+          Мы обучаем современным IT-профессиям с нуля. Получите востребованные навыки,
+          создайте портфолио и начните карьеру в технологиях под руководством опытных менторов.
+        </p>
+
+        {/* Кнопки */}
+        <div
+          className="flex flex-col sm:flex-row gap-4"
+          data-aos="fade-up"
+          data-aos-duration="800"
+          data-aos-delay="600"
+        >
+          <div className="dark">
+            <HashLink
+              smooth
+              to="#contacts"
+            >
+              <Button size="lg" className="group">
+                Получить консультацию
+                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </HashLink>
+          </div>
+          <div className="dark">
+            <Link
+              to="/courses"
+            >
+              <Button variant="outline" size="lg">
+                Посмотреть программу
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Правая колонка - логотип */}
+      <div
+        className="order-1 lg:order-2 flex justify-center lg:justify-end items-center"
+        data-aos="fade-up"
+        data-aos-duration="1000"
+        data-aos-delay="300"
+        data-aos-offset="100"
+      >
+        <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
+          <img
+            src={log}
+            alt="Learn IT Academy"
+            className="w-full h-auto object-contain brightness-0 invert drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]"
+          />
+
+          {/* Декоративные элементы */}
+          <div
+            className="absolute -top-10 -right-10 w-40 h-40 bg-red-500/10 rounded-full blur-3xl"
+            data-aos="fade-left"
+            data-aos-duration="1000"
+            data-aos-delay="500"
+          />
+
+          <div
+            className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"
+            data-aos="fade-right"
+            data-aos-duration="1000"
+            data-aos-delay="600"
           />
         </div>
+      </div>
+    </div>
+  </div>
 
-        {/* Основной контент с колонками */}
-        <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)]">
-            {/* Левая колонка - текст */}
-            <div
-              className="order-2 lg:order-1"
-              data-aos="fade-right"
-              data-aos-duration="800"
-              data-aos-delay="200"
-            >
-              {/* Бейдж с набором */}
-              <div
-                className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium mb-6"
-                data-aos="fade-up"
-                data-aos-duration="800"
-                data-aos-delay="300"
-              >
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                </span>
-                Набор на новый поток открыт
-              </div>
-
-              {/* Заголовок */}
-              <h1
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white leading-[1.1] tracking-tight mb-6"
-                data-aos="fade-up"
-                data-aos-duration="900"
-                data-aos-delay="400"
-              >
-                Добро пожаловать в <br />
-                <span className="text-red-500">
-                  академию программирования
-                </span> <br />
-                <span className="text-red-500">Learn IT</span>
-              </h1>
-
-              {/* Описание */}
-              <p
-                className="text-lg md:text-xl text-zinc-400 mb-8 max-w-2xl leading-relaxed"
-                data-aos="fade-up"
-                data-aos-duration="800"
-                data-aos-delay="500"
-              >
-                Мы обучаем современным IT-профессиям с нуля. Получите востребованные навыки,
-                создайте портфолио и начните карьеру в технологиях под руководством опытных менторов.
-              </p>
-
-              {/* Кнопки */}
-              <div
-                className="flex flex-col sm:flex-row gap-4"
-                data-aos="fade-up"
-                data-aos-duration="800"
-                data-aos-delay="600"
-              >
-                <div className="dark">
-                  <HashLink
-                    smooth
-                    to="#contacts"
-                  >
-                    <Button size="lg" className="group">
-                      Получить консультацию
-                      <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </HashLink>
-                </div>
-                <div className="dark">
-                  <Link
-                    to="/courses"
-                  >
-                    <Button variant="outline" size="lg">
-                      Посмотреть программу
-                    </Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            {/* Правая колонка - логотип */}
-            <div
-              className="order-1 lg:order-2 flex justify-center lg:justify-end items-center"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-              data-aos-offset="100"
-            >
-              <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                <img
-                  src={log}
-                  alt="Learn IT Academy"
-                  className="w-full h-auto object-contain brightness-0 invert drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]"
-                />
-
-                {/* Декоративные элементы */}
-                <div
-                  className="absolute -top-10 -right-10 w-40 h-40 bg-red-500/10 rounded-full blur-3xl"
-                  data-aos="fade-left"
-                  data-aos-duration="1000"
-                  data-aos-delay="500"
-                />
-
-                <div
-                  className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"
-                  data-aos="fade-right"
-                  data-aos-duration="1000"
-                  data-aos-delay="600"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Анимированный скролл индикатор */}
-        <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-          data-aos="fade"
-          data-aos-duration="1000"
-          data-aos-delay="1000"
-        >
-          <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center">
-            <div className="w-1 h-2 bg-red-500 rounded-full mt-2 animate-bounce" />
-          </div>
-        </div>
-      </section>
+  {/* Анимированный скролл индикатор */}
+  <div
+    className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
+    data-aos="fade"
+    data-aos-duration="1000"
+    data-aos-delay="1000"
+  >
+    <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center">
+      <div className="w-1 h-2 bg-red-500 rounded-full mt-2 animate-bounce" />
+    </div>
+  </div>
+</section>
 
       {/* Courses Section */}
       <Section
