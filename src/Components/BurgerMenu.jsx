@@ -7,7 +7,7 @@ import {
   Menu, X, Phone, Home, BookOpen, Settings, 
   Newspaper, Info, Mail, ChevronRight, LogIn, Sun, Moon
 } from 'lucide-react';
-import log from '../assets/log.png'; // Импорт изображения
+import log from '../assets/log.png';
 
 const BurgerMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +40,14 @@ const BurgerMenu = () => {
       observer.disconnect();
     };
   }, []);
+
+  // Функция переключения темы
+  const handleThemeToggle = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    document.documentElement.classList.toggle('dark', newTheme);
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light');
+  };
 
   // Управление рендерингом для анимации закрытия
   useEffect(() => {
@@ -207,7 +215,7 @@ const BurgerMenu = () => {
   // Меню и overlay с анимацией и поддержкой темы
   const menuContent = shouldRender && (
     <>
-      {/* Overlay с анимацией появления/исчезновения - адаптирован под тему */}
+      {/* Overlay с анимацией появления/исчезновения */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: isOpen ? 1 : 0 }}
@@ -292,7 +300,6 @@ const BurgerMenu = () => {
                   <div className={`absolute inset-0 rounded-lg blur-sm opacity-50 animate-pulse ${
                     isDark ? 'bg-red-600' : 'bg-red-500'
                   }`} />
-                  {/* Логотип с изображением вместо текста */}
                   <div className="relative w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-lg flex items-center justify-center shadow-lg overflow-hidden">
                     <img 
                       src={log} 
@@ -473,34 +480,110 @@ const BurgerMenu = () => {
                   </div>
                 </motion.a>
 
-                {/* Индикатор темы */}
+                {/* Индикатор темы с красивой анимацией */}
                 <motion.div 
                   variants={itemVariants}
-                  className={`flex items-center justify-center gap-2 py-2 px-3 rounded-lg ${
+                  onClick={handleThemeToggle}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`relative cursor-pointer overflow-hidden flex items-center justify-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 ${
                     isDark ? 'bg-zinc-800/50' : 'bg-gray-100'
                   }`}
                 >
+                  {/* Анимированный фоновый градиент при переключении */}
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-r from-red-500/20 via-red-600/20 to-red-700/20"
+                    initial={{ x: '-100%' }}
+                    animate={{ 
+                      x: isDark ? '-100%' : '100%',
+                      transition: { duration: 0.5, ease: "easeInOut" }
+                    }}
+                  />
+                  
+                  {/* Эффект пульсации при переключении */}
+                  <motion.div 
+                    className="absolute inset-0 bg-red-500/10"
+                    animate={{ 
+                      scale: [1, 1.5, 1],
+                      opacity: [0, 0.3, 0]
+                    }}
+                    transition={{ 
+                      duration: 0.8,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut"
+                    }}
+                  />
+
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={isDark ? 'dark' : 'light'}
-                      initial={{ rotate: -180, opacity: 0 }}
-                      animate={{ rotate: 0, opacity: 1 }}
-                      exit={{ rotate: 180, opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="flex items-center gap-2"
+                      initial={{ rotate: -180, scale: 0.5, opacity: 0 }}
+                      animate={{ 
+                        rotate: 0, 
+                        scale: 1, 
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 300,
+                          damping: 15
+                        }
+                      }}
+                      exit={{ 
+                        rotate: 180, 
+                        scale: 0.5, 
+                        opacity: 0,
+                        transition: {
+                          duration: 0.2
+                        }
+                      }}
+                      className="flex items-center gap-2 relative z-10"
                     >
-                      {isDark ? (
-                        <Moon size={14} className="text-red-500" />
-                      ) : (
-                        <Sun size={14} className="text-red-500" />
-                      )}
-                      <span className={`text-xs ${
-                        isDark ? 'text-zinc-400' : 'text-gray-600'
-                      }`}>
-                        {isDark ? 'Тёмная тема активна' : 'Светлая тема активна'}
-                      </span>
+                      {/* Контейнер для иконки с анимацией */}
+                      <motion.div
+                        animate={{ 
+                          rotate: [0, 10, -10, 0],
+                        }}
+                        transition={{ 
+                          duration: 0.5,
+                          delay: 0.2,
+                          ease: "easeInOut"
+                        }}
+                      >
+                        {isDark ? (
+                          <Moon size={14} className="text-red-500" />
+                        ) : (
+                          <Sun size={14} className="text-red-500" />
+                        )}
+                      </motion.div>
+                      
+                      {/* Текст с анимацией появления */}
+                      <motion.span 
+                        className={`text-xs ${
+                          isDark ? 'text-zinc-400' : 'text-gray-600'
+                        }`}
+                        initial={{ x: -10, opacity: 0 }}
+                        animate={{ x: 0, opacity: 1 }}
+                        exit={{ x: 10, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {isDark ? 'Тёмная тема' : 'Светлая тема'}
+                      </motion.span>
                     </motion.div>
                   </AnimatePresence>
+
+                  {/* Эффект "волны" при клике */}
+                  <motion.div 
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ scale: 0, opacity: 0.5 }}
+                    whileTap={{ scale: 2, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    style={{ 
+                      background: 'radial-gradient(circle, rgba(239, 68, 68, 0.3) 0%, transparent 70%)',
+                      originX: 0.5,
+                      originY: 0.5
+                    }}
+                  />
                 </motion.div>
               </motion.div>
 
