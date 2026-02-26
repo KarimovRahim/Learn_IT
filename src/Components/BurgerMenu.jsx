@@ -602,7 +602,7 @@ const BurgerMenu = () => {
                 </motion.div> */}
 
                 {/* ВАРИАНТ 2: Анимация "распадающиеся буквы" - раскомментируйте для использования */}
-                {/* <motion.div 
+                <motion.div 
                   variants={itemVariants}
                   onClick={handleThemeToggle}
                   whileHover={{ scale: 1.02 }}
@@ -753,10 +753,10 @@ const BurgerMenu = () => {
                       originY: 0.5
                     }}
                   />
-                </motion.div> */}
+                </motion.div>
 
                 {/* ВАРИАНТ 3: Анимация "скролл" - раскомментируйте для использования */}
-                <motion.div 
+                {/* <motion.div 
                   variants={itemVariants}
                   onClick={handleThemeToggle}
                   whileHover={{ scale: 1.02 }}
@@ -863,7 +863,7 @@ const BurgerMenu = () => {
                       originY: 0.5
                     }}
                   />
-                </motion.div>
+                </motion.div> */}
               </motion.div>
 
               {/* Нижний декоративный элемент */}
