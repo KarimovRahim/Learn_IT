@@ -400,12 +400,13 @@ const Home = () => {
                           {course.price} <span className="text-xs font-medium text-zinc-400 uppercase ml-1">смн</span>
                         </span>
 
-                        <Link
-                          to="/contact"
+                        <HashLink
+                          smooth
+                          to="#contacts"
                           className="text-sm font-bold text-red-600 flex items-center gap-1 hover:gap-2 transition-all"
                         >
                           Записаться <ArrowForwardIcon sx={{ fontSize: 18 }} />
-                        </Link>
+                        </HashLink>
                       </div>
                     </div>
                   </div>
