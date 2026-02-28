@@ -1,5 +1,7 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import parse from 'html-react-parser';
+
 import { Link } from 'react-router-dom'
 import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
@@ -10,39 +12,25 @@ import Amir from '../assets/amir.jpg'
 import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
 import Aurora from '../Components/Aurora.jsx';
-import { ArrowRight, Code, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
+import { ArrowRight, Code, Code2, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
+
+// Swiper компоненты и стили
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
+// Иконки MUI (используем те, что у вас точно есть)
+import TerminalIcon from "@mui/icons-material/Terminal";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Home = () => {
-  const courses = [
-    {
-      id: 1,
-      title: 'Frontend Разработка',
-      description: 'Создавайте современные и интерактивные веб-сайты используя HTML, CSS, JavaScript и React.',
-      icon: <Code className="w-8 h-8 text-red-600 dark:text-red-500" />,
-      benefits: ['React & TypeScript', 'Адаптивная верстка', 'SPA приложения'],
-    },
-    {
-      id: 2,
-      title: 'Python Разработчик',
-      description: 'Освойте самый популярный язык программирования для веба, анализа данных и автоматизации.',
-      icon: <Database className="w-8 h-8 text-red-600 dark:text-red-500" />,
-      benefits: ['Django & FastAPI', 'Работа с базами данных', 'Основы DevOps'],
-    },
-    {
-      id: 3,
-      title: 'UI/UX Дизайн',
-      description: 'Научитесь проектировать удобные интерфейсы и создавать дизайн-системы в Figma.',
-      icon: <PenTool className="w-8 h-8 text-red-600 dark:text-red-500" />,
-      benefits: ['Figma Mastery', 'Прототипирование', 'Исследования пользователей'],
-    },
-    {
-      id: 4,
-      title: 'Мобильная разработка',
-      description: 'Разработка нативных приложений для iOS и Android используя современные фреймворки.',
-      icon: <Smartphone className="w-8 h-8 text-red-600 dark:text-red-500" />,
-      benefits: ['Flutter / React Native', 'Публикация в сторы', 'Архитектура приложений'],
-    },
-  ]
+
+  const [data, setData] = useState([]);
 
   const features = [
     {
@@ -106,6 +94,24 @@ const Home = () => {
     'TechCorp', 'InnoSoft', 'DevStudio', 'CloudSystems',
     'DataFlow', 'WebMatrix', 'CyberGuard', 'FutureTech'
   ]
+
+  async function getCourses() {
+    try {
+      const baseUrl = import.meta.env.VITE_POCKETBASE_URL || 'https://ehjoi-manaviyat.pockethost.io';
+      const res = await fetch(`${baseUrl}/api/collections/learn_it_courses/records?page=1&perPage=50`);
+      const json = await res.json();
+      const formattedData = json.items.map((rec) => ({
+        id: rec.id,
+        title: rec.nameCourse,
+        description: rec.description,
+        benefits: rec.tags ? rec.tags.split(',') : ["Практика", "Проекты"],
+        price: rec.price,
+      }));
+      setData(formattedData);
+    } catch (e) { console.error(e); }
+  }
+
+  useEffect(() => { getCourses(); }, []);
 
   return (
     <>
@@ -320,42 +326,112 @@ const Home = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {courses.map((course, index) => (
-            <div
-              key={course.id}
-              className="group bg-white border border-black/10 hover:border-red-600/50 rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-600/20 dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30 dark:hover:shadow-red-900/10"
-              data-aos="fade-up"
-              data-aos-duration="600"
-              data-aos-delay={200 + index * 100}
-            >
-              <div className="bg-red-50 w-14 h-14 rounded-lg flex items-center justify-center border border-red-100 mb-6 group-hover:scale-110 transition-transform duration-300 dark:bg-zinc-950 dark:border-zinc-800">
-                {course.icon}
+        <div className="w-full py-20 bg-[#fdfdfd] dark:bg-zinc-950 overflow-hidden">
+          <div className="max-w-[1400px] mx-auto px-6">
+
+            {/* Шапка с кнопками навигации */}
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+              <div className="text-left">
+                <h1 className="text-4xl font-bold mb-4 dark:text-white tracking-tight">Наши курсы</h1>
+                <p className="text-gray-500 max-w-xl dark:text-zinc-400">
+                  Выберите направление и начните свой путь в IT. Все курсы включают практические задания и поддержку менторов.
+                </p>
               </div>
 
-              <h3 className="text-xl font-bold text-black mb-3 group-hover:text-red-600 transition-colors dark:text-white dark:group-hover:text-red-500">
-                {course.title}
-              </h3>
-
-              <p className="text-black/70 text-sm mb-6 leading-relaxed dark:text-zinc-400">
-                {course.description}
-              </p>
-
-              <ul className="space-y-2 mb-6">
-                {course.benefits.map((benefit, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm text-black/80 dark:text-zinc-300">
-                    <CheckCircle2 className="w-4 h-4 text-red-600 dark:text-red-500" />
-                    {benefit}
-                  </li>
-                ))}
-              </ul>
-
-              <Button variant="ghost" className="w-full justify-between group/btn px-0 hover:bg-transparent hover:text-red-600 dark:hover:text-red-500">
-                Подробнее
-                <span className="text-lg group-hover/btn:translate-x-1 transition-transform">→</span>
-              </Button>
+              {/* Кастомные кнопки навигации */}
+              <div className="flex gap-3">
+                <button className="swiper-prev-btn w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 dark:border-zinc-800 dark:text-white">
+                  <ArrowBackIosNewIcon sx={{ fontSize: 18 }} />
+                </button>
+                <button className="swiper-next-btn w-12 h-12 rounded-full border border-gray-200 flex items-center justify-center hover:bg-red-600 hover:text-white hover:border-red-600 transition-all duration-300 dark:border-zinc-800 dark:text-white">
+                  <ArrowForwardIosIcon sx={{ fontSize: 18, marginLeft: '3px' }} />
+                </button>
+              </div>
             </div>
-          ))}
+
+            <Swiper
+              modules={[Pagination, Navigation]}
+              spaceBetween={25}
+              slidesPerView={1}
+              // Привязываем кастомные кнопки
+              navigation={{
+                prevEl: '.swiper-prev-btn',
+                nextEl: '.swiper-next-btn',
+              }}
+              pagination={{ clickable: true, dynamicBullets: true }}
+              breakpoints={{
+                640: { slidesPerView: 2 },
+                1024: { slidesPerView: 3 },
+                1280: { slidesPerView: 4 },
+              }}
+              className="!pb-14"
+            >
+              {data.map((course) => (
+                <SwiperSlide key={course.id} className="h-auto">
+                  <div className="group bg-white h-full border border-gray-100 hover:border-transparent rounded-2xl p-8 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:bg-zinc-900 dark:border-zinc-800 flex flex-col relative overflow-hidden">
+
+                    {/* Декоративный элемент фона при наведении */}
+                    <div className="absolute -right-4 -top-4 w-24 h-24 bg-red-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 -z-0 dark:bg-red-900/10" />
+
+                    <div className="relative z-10 flex flex-col h-full">
+                      <div className="bg-zinc-50 w-14 h-14 rounded-xl flex items-center justify-center mb-8 group-hover:bg-red-600 group-hover:text-white transition-colors duration-300 dark:bg-zinc-800">
+                        <TerminalIcon />
+                      </div>
+
+                      <h3 className="text-xl font-bold text-zinc-900 mb-4 group-hover:text-red-600 transition-colors dark:text-white">
+                        {course.title}
+                      </h3>
+
+                      <div className="text-zinc-500 text-sm mb-6 line-clamp-4 flex-grow dark:text-zinc-400 leading-relaxed">
+                        {typeof course.description === 'string' ? parse(course.description) : course.description}
+                      </div>
+
+                      <ul className="space-y-3 mb-8">
+                        {course.benefits.slice(0, 3).map((benefit, idx) => (
+                          <li key={idx} className="flex items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                            {benefit.trim()}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="pt-6 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between mt-auto">
+                        <span className="text-lg font-bold text-zinc-900 dark:text-white">
+                          {course.price} <span className="text-xs font-medium text-zinc-400 uppercase ml-1">смн</span>
+                        </span>
+
+                        <Link
+                          to="/contact"
+                          className="text-sm font-bold text-red-600 flex items-center gap-1 hover:gap-2 transition-all"
+                        >
+                          Записаться <ArrowForwardIcon sx={{ fontSize: 18 }} />
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          <style>{`
+        .swiper-pagination-bullet {
+          width: 8px;
+          height: 8px;
+          background: #d1d1d1 !important;
+          opacity: 1 !important;
+        }
+        .swiper-pagination-bullet-active {
+          background: #dc3545 !important;
+          width: 24px !important;
+          border-radius: 4px !important;
+          transition: all 0.3s ease;
+        }
+        /* Скрываем стандартные стрелки swiper, если они появятся */
+        .swiper-button-next, .swiper-button-prev {
+          display: none !important;
+        }
+      `}</style>
         </div>
       </Section>
 
@@ -749,6 +825,21 @@ const Home = () => {
         </div>
 
       </Section>
+      <div className="w-full flex justify-center bg-[#DA4533] dark:bg-transparent pt-[70px] pb-[50px]">
+        <div className="w-[90%] max-w-[1000px] h-[400px] rounded-xl overflow-hidden shadow-lg">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d1522.0419508867233!2d69.6379656!3d40.2738864!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38b1b363df3d22ab%3A0xcf204e8dd836ec19!2sLearn%20IT%20Academy!5e0!3m2!1sen!2s!4v1747903235766!5m2!1sen!2s"
+            width="100%"
+            height="100%"
+            style={{ border: 0 }}
+            allowFullScreen=""
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+
     </>
   )
 }

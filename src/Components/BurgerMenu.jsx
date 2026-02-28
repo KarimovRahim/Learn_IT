@@ -317,7 +317,7 @@ const BurgerMenu = () => {
                   <span className={`text-xs ${
                     isDark ? 'text-zinc-400' : 'text-gray-500'
                   }`}>
-                    Образовательный центр
+                    Академия программирования
                   </span>
                 </motion.div>
               </div>
