@@ -942,7 +942,7 @@ const Home = () => {
               partners.map((partner, index) => (
                 <a
                   key={partner.id}
-                  href={partner.website || '#'}
+                  href={partner.website || '#contacts'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group flex flex-col items-center gap-2 transition-all hover:-translate-y-1"
