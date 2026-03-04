@@ -122,6 +122,19 @@ const Aurora = ({
   const canvasRef = useRef(null);
   const [isSupported, setIsSupported] = useState(true);
   const propsRef = useRef({ colorStops, amplitude, blend, speed, time });
+  
+  // 🔥 ФИКС: Сохраняем начальное время в sessionStorage
+  const [initialTime] = useState(() => {
+    // Пытаемся получить сохранённое время из sessionStorage
+    const savedTime = sessionStorage.getItem('aurora-start-time');
+    if (savedTime) {
+      return parseFloat(savedTime);
+    }
+    // Если нет сохранённого времени, создаём новое и сохраняем
+    const newTime = Date.now() / 1000; // в секундах
+    sessionStorage.setItem('aurora-start-time', newTime.toString());
+    return newTime;
+  });
 
   useEffect(() => {
     propsRef.current = { colorStops, amplitude, blend, speed, time };
@@ -148,7 +161,6 @@ const Aurora = ({
     };
 
     if (!checkWebGLSupport()) {
-      // Если WebGL не поддерживается, показываем статический градиент
       return;
     }
 
@@ -214,7 +226,6 @@ const Aurora = ({
 
       mesh = new Mesh(gl, { geometry, program });
 
-      // Убедимся, что canvas не дублируется
       if (canvasRef.current) {
         try {
           if (canvasRef.current.parentNode === ctn) {
@@ -226,15 +237,18 @@ const Aurora = ({
       ctn.appendChild(gl.canvas);
       canvasRef.current = gl.canvas;
 
-      const startTime = performance.now();
-
+      // 🔥 ФИКС: Используем сохранённое начальное время
       const update = () => {
         if (!program || !renderer || !mesh) return;
         animateId = requestAnimationFrame(update);
 
         const currentProps = propsRef.current;
-        const elapsed = (performance.now() - startTime) * 0.001;
-
+        
+        // 🔥 Вычисляем время относительно сохранённого initialTime
+        const currentTime = Date.now() / 1000;
+        const elapsed = currentTime - initialTime;
+        
+        // Устанавливаем uTime на основе elapsed времени
         program.uniforms.uTime.value = (currentProps.time + elapsed) * currentProps.speed * 0.2;
         program.uniforms.uAmplitude.value = currentProps.amplitude;
         program.uniforms.uBlend.value = currentProps.blend;
@@ -253,8 +267,6 @@ const Aurora = ({
       };
 
       animateId = requestAnimationFrame(update);
-
-      // Задержка для корректного ресайза
       setTimeout(resize, 100);
 
       return () => {
@@ -274,9 +286,8 @@ const Aurora = ({
       setIsSupported(false);
       return;
     }
-  }, []);
+  }, [initialTime]); // Добавляем initialTime в зависимости
 
-  // Если WebGL не поддерживается, показываем статичный градиент
   if (!isSupported) {
     const gradientColors = colorStops.join(', ');
     return (
