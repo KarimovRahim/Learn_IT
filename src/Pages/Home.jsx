@@ -12,7 +12,7 @@ import Amir from '../assets/amir.jpg'
 import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
 import Aurora from '../Components/Aurora.jsx';
-import { ArrowRight, Code, Code2, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, TrendingUp, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
+import { ArrowRight, Code, Code2, TrendingUp, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, TrendingUp, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
 
 const partnersApi = "https://ehjoi-manaviyat.pockethost.io/api/collections/learn_it_parthners/records";
 
@@ -907,89 +907,159 @@ const Home = () => {
         </div>
       </Section>
 
-      {/* Partners Section */}
-      <Section
-        className="bg-white border-y border-black/10 py-12 md:py-16 dark:bg-zinc-900 dark:border-zinc-800"
-        data-aos="fade-up"
-        data-aos-duration="800"
-        data-aos-offset="150"
-      >
-        <div className="text-center mb-10">
-          <h2
-            className="text-2xl font-bold text-black mb-2 dark:text-white"
+{/* Partners Section */}
+<Section
+  className="bg-white dark:bg-transparent"
+  data-aos="fade-up"
+  data-aos-duration="1000"
+  data-aos-offset="200"
+>
+  <div className="text-center mb-16">
+    <div
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-4 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
+      data-aos="fade-up"
+      data-aos-duration="600"
+    >
+      <TrendingUp className="w-4 h-4" />
+      Наши партнёры
+    </div>
+    <h2
+      className="text-3xl md:text-4xl font-bold text-black mb-4 dark:text-white"
+      data-aos="fade-up"
+      data-aos-duration="700"
+    >
+      Компании, которые нам <span className="text-red-600 dark:text-red-500">доверяют</span>
+    </h2>
+    <p
+      className="text-black/70 max-w-2xl mx-auto dark:text-zinc-400"
+      data-aos="fade-up"
+      data-aos-duration="700"
+      data-aos-delay="100"
+    >
+      Ведущие IT-компании, где работают наши выпускники и с которыми мы активно сотрудничаем
+    </p>
+  </div>
+
+  {isLoading.partners ? (
+    <div className="flex justify-center items-center py-20">
+      <div className="inline-block w-12 h-12 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      {partners.length > 0 ? (
+        partners.map((partner, index) => (
+          <a
+            key={partner.id}
+            href={partner.website || '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group relative"
             data-aos="fade-up"
             data-aos-duration="600"
+            data-aos-delay={100 + index * 50}
           >
-            Наши партнёры
-          </h2>
-          <p
-            className="text-black/70 text-sm dark:text-zinc-400"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="100"
-          >
-            Компании, которые доверяют нам и где работают наши выпускники
-          </p>
-        </div>
-
-        {isLoading.partners ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="inline-block w-8 h-8 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
-          </div>
-        ) : (
-          <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16">
-            {partners.length > 0 ? (
-              partners.map((partner, index) => (
-                <a
-                  key={partner.id}
-                  href={partner.website || '#contacts'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex flex-col items-center gap-2 transition-all hover:-translate-y-1"
-                  data-aos="zoom-in"
-                  data-aos-duration="500"
-                  data-aos-delay={50 + index * 30}
-                >
-                  {partner.logo ? (
-                    <img
-                      src={`https://ehjoi-manaviyat.pockethost.io/api/files/learn_it_parthners/${partner.id}/${partner.logo}`}
-                      alt={partner.name}
-                      className="w-16 h-16 md:w-20 md:h-20 object-contain brightness-0 opacity-30 group-hover:brightness-100 group-hover:opacity-100 group-hover:text-red-600 transition-all dark:brightness-0 dark:invert dark:opacity-50 dark:group-hover:brightness-100 dark:group-hover:invert-0 dark:group-hover:opacity-100"
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                        e.target.nextElementSibling?.classList.remove('hidden');
-                      }}
-                    />
-                  ) : null}
-
-                  <span className={`text-xl md:text-2xl font-bold text-black/30 group-hover:text-red-600 transition-colors dark:text-zinc-500 dark:group-hover:text-white ${partner.logo ? 'hidden' : ''}`}>
-                    {partner.name}
-                  </span>
-
-                  {partner.description && (
-                    <span className="text-xs text-black/50 opacity-0 group-hover:opacity-100 transition-opacity dark:text-zinc-500">
-                      {partner.description}
-                    </span>
-                  )}
-                </a>
-              ))
-            ) : (
-              // Запасные партнёры на случай, если API не загрузился
-              ['TechCorp', 'InnoSoft', 'DevStudio', 'CloudSystems'].map((partner, index) => (
-                <div
-                  key={index}
-                  className="text-xl md:text-2xl font-bold text-black/30 hover:text-red-600 transition-colors cursor-default select-none dark:text-zinc-500 dark:hover:text-white"
-                  data-aos="zoom-in"
-                  data-aos-duration="500"
-                  data-aos-delay={50 + index * 30}
-                >
-                  {partner}
+            <div className="relative overflow-hidden rounded-xl aspect-square mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center border border-gray-200 dark:border-zinc-700 shadow-lg group-hover:shadow-xl transition-all duration-500">
+              
+              {/* Логотип партнёра */}
+              {partner.logo ? (
+                <img
+                  src={`https://ehjoi-manaviyat.pockethost.io/api/files/learn_it_parthners/${partner.id}/${partner.logo}`}
+                  alt={partner.name}
+                  className="w-full h-full object-contain p-8 transition-all duration-700 ease-out group-hover:scale-110"
+                  onError={(e) => {
+                    // Если логотип не загрузился, показываем первую букву названия
+                    e.target.style.display = 'none';
+                    e.target.parentElement.innerHTML = `
+                      <div class="text-4xl font-bold text-red-600 dark:text-red-500">
+                        ${partner.name.charAt(0)}
+                      </div>
+                    `;
+                  }}
+                />
+              ) : (
+                <div className="text-4xl font-bold text-red-600 dark:text-red-500">
+                  {partner.name.charAt(0)}
                 </div>
-              ))
-            )}
+              )}
+
+              {/* Оверлей с градиентом при наведении */}
+              <div className="absolute inset-0 bg-gradient-to-t from-red-600/90 via-red-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              {/* Название компании при наведении (для мобильных) */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <p className="text-white text-sm font-medium text-center line-clamp-2">
+                  {partner.name}
+                </p>
+              </div>
+
+              {/* Иконка внешней ссылки */}
+              <div className="absolute top-4 right-4 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-0 group-hover:scale-100">
+                <span className="text-red-600 text-lg font-bold">↗</span>
+              </div>
+            </div>
+
+            <div className="text-center relative">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors duration-300">
+                {partner.name}
+              </h3>
+              
+              {partner.description && (
+                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-1 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-300 line-clamp-2">
+                  {partner.description}
+                </p>
+              )}
+
+              {/* Линия под названием при наведении */}
+              <div className="w-0 h-0.5 bg-red-500 mx-auto mt-3 group-hover:w-16 transition-all duration-500"></div>
+            </div>
+          </a>
+        ))
+      ) : (
+        // Запасные партнёры в том же стиле
+        ['TechCorp', 'InnoSoft', 'DevStudio', 'CloudSystems'].map((partner, index) => (
+          <div
+            key={index}
+            className="group relative"
+            data-aos="fade-up"
+            data-aos-duration="600"
+            data-aos-delay={100 + index * 50}
+          >
+            <div className="relative overflow-hidden rounded-xl aspect-square mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center border border-gray-200 dark:border-zinc-700 shadow-lg group-hover:shadow-xl transition-all duration-500">
+              
+              {/* Первая буква названия как логотип */}
+              <div className="text-4xl font-bold text-red-600 dark:text-red-500 transition-all duration-700 ease-out group-hover:scale-110">
+                {partner.charAt(0)}
+              </div>
+
+              {/* Оверлей с градиентом при наведении */}
+              <div className="absolute inset-0 bg-gradient-to-t from-red-600/90 via-red-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              {/* Название компании при наведении */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+                <p className="text-white text-sm font-medium text-center">
+                  {partner}
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center relative">
+              <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors duration-300">
+                {partner}
+              </h3>
+              
+              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                Партнёр
+              </p>
+
+              {/* Линия под названием при наведении */}
+              <div className="w-0 h-0.5 bg-red-500 mx-auto mt-3 group-hover:w-16 transition-all duration-500"></div>
+            </div>
           </div>
-        )}
-      </Section>
+        ))
+      )}
+    </div>
+  )}
+</Section>
 
       {/* Contact Section */}
       <Section
