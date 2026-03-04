@@ -13,7 +13,7 @@ import log from '../assets/log.png'; // Импорт логотипа
 
 const Layout = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isDark, setIsDark] = useState(false)
+  const [isDark, setIsDark] = useState(false) // false = светлая тема по умолчанию
   const location = useLocation()
 
   useEffect(() => {
@@ -46,9 +46,8 @@ const Layout = () => {
   useEffect(() => {
     const userTheme = localStorage.getItem('theme');
 
-    const isDarkTheme =
-      userTheme === 'dark' ||
-      (!userTheme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    // Светлая тема по умолчанию
+    const isDarkTheme = userTheme === 'dark';
 
     if (isDarkTheme) {
       document.documentElement.classList.add('dark');
@@ -77,12 +76,13 @@ const Layout = () => {
   const isActive = (path) => location.pathname === path
 
   return (
-    <div className="min-h-screen bg-zinc-950 font-sans selection-red">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 font-sans selection-red transition-colors duration-300">
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled
-          ? 'backdrop-blur-md border-b border-zinc-800 bg-zinc-950/80 py-3'
-          : 'bg-transparent py-5'
-          }`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+          isScrolled
+            ? 'backdrop-blur-md border-b border-gray-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-950/80 py-3'
+            : 'bg-transparent py-5'
+        }`}
         data-aos="fade-down"
         data-aos-duration="600"
         data-aos-easing="ease-out-quad"
@@ -98,15 +98,17 @@ const Layout = () => {
             data-aos-delay="200"
             data-aos-easing="ease-out-cubic"
           >
-            {/* Логотип с изображением вместо текста */}
+            {/* Логотип с изображением */}
             <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center shadow-lg overflow-hidden">
               <img
                 src={log}
                 alt="Learn IT Logo"
-                className="w-5 h-5 object-contain"
+                className="w-5 h-5 object-contain brightness-0 invert dark:brightness-100 dark:invert-0"
               />
             </div>
-            <span className="text-xl font-bold text-white tracking-tight">Learn IT</span>
+            <span className="text-xl font-bold text-gray-900 dark:text-white tracking-tight">
+              Learn IT
+            </span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
@@ -114,10 +116,11 @@ const Layout = () => {
               <Link
                 key={link.name}
                 to={link.path}
-                className={`text-sm font-medium transition-colors ${isActive(link.path)
-                  ? 'text-white border-b-2 border-red-500 pb-1'
-                  : 'text-zinc-400 hover:text-white'
-                  }`}
+                className={`text-sm font-medium transition-colors ${
+                  isActive(link.path)
+                    ? 'text-red-600 dark:text-white border-b-2 border-red-500 pb-1'
+                    : 'text-gray-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-white'
+                }`}
                 data-aos="fade-down"
                 data-aos-duration="500"
                 data-aos-delay={300 + index * 100}
@@ -133,7 +136,7 @@ const Layout = () => {
             <div className="hidden md:flex items-center gap-6">
               <a
                 href="tel:+992920091313"
-                className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
+                className="flex items-center gap-2 text-gray-600 dark:text-zinc-400 hover:text-red-600 dark:hover:text-white transition-colors group"
                 data-aos="fade-left"
                 data-aos-duration="600"
                 data-aos-delay="700"
@@ -149,6 +152,7 @@ const Layout = () => {
                 <Button
                   variant="primary"
                   size="sm"
+                  className="bg-red-500 hover:bg-red-600 text-white dark:bg-red-500 dark:hover:bg-red-600"
                   data-aos="zoom-in"
                   data-aos-duration="500"
                   data-aos-delay="800"

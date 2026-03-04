@@ -5,6 +5,7 @@ import Home from "./Pages/Home"
 import Courses from "./Pages/Courses"
 import Services from "./Pages/Services"
 import News from "./Pages/News"
+import DetailPage from "./Pages/DetailPage"
 
 const App = () => {
 
@@ -28,6 +29,10 @@ const App = () => {
         {
           path: "news",
           element: <News />
+        },
+        {
+          path: "detail/:type/:id",
+          element: <DetailPage />
         }
       ]
     }

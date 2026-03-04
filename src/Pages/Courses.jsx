@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import parse from 'html-react-parser';
 import { HashLink } from 'react-router-hash-link';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
+import ReadMoreButton from '../Components/ReadMoreButton.jsx';
 
 // MUI Icons
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
@@ -11,12 +13,18 @@ import StarIcon from "@mui/icons-material/Star";
 import PaymentsIcon from "@mui/icons-material/Payments";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import SearchIcon from "@mui/icons-material/Search";
+import FilterListIcon from "@mui/icons-material/FilterList";
 
 const Courses = () => {
-  // 1. Хуки должны быть ВНУТРИ компонента
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("Все");
+  const [sortBy, setSortBy] = useState("default");
 
-  // 2. Функция загрузки тоже внутри (или вынесена в отдельный сервис)
+  const levels = ["Все", "Для начинающих", "Для продвинутых", "С трудоустройством"];
+
   async function getCourses() {
     try {
       const res = await fetch(
@@ -34,13 +42,14 @@ const Courses = () => {
         imageCourse: `${import.meta.env.VITE_POCKETBASE_URL || 'https://ehjoi-manaviyat.pockethost.io'}/api/files/${rec.collectionId}/${rec.id}/${rec.image}`,
         months: rec.months,
         nameCourse: rec.nameCourse,
-        tags: rec.tags, 
+        tags: rec.tags,
         description: rec.description,
         price: rec.price,
         rate: rec.rate,
       }));
 
       setData(formattedData);
+      setFilteredData(formattedData);
     } catch (error) {
       console.error("Error fetching courses:", error);
     }
@@ -50,6 +59,36 @@ const Courses = () => {
     getCourses();
   }, []);
 
+  // Фильтрация и сортировка
+  useEffect(() => {
+    let filtered = [...data];
+
+    // Поиск
+    if (searchQuery) {
+      filtered = filtered.filter(course =>
+        course.nameCourse.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        course.description.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    // Фильтр по уровню
+    if (selectedLevel !== "Все") {
+      // Здесь можно добавить логику фильтрации по уровню
+      // Например, по тегам или специальному полю
+    }
+
+    // Сортировка
+    if (sortBy === "price_asc") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price_desc") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === "rating") {
+      filtered.sort((a, b) => b.rate - a.rate);
+    }
+
+    setFilteredData(filtered);
+  }, [searchQuery, selectedLevel, sortBy, data]);
+
   return (
     <div className="pt-20">
       <Section
@@ -57,136 +96,218 @@ const Courses = () => {
         data-aos="fade"
         data-aos-duration="1000"
       >
-        <div
-          className="text-center max-w-3xl mx-auto mb-16"
-          data-aos="fade-up"
-          data-aos-duration="800"
-        >
-          <h1
+        {/* Заголовок */}
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-bold text-black mb-6 dark:text-white"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="100"
           >
             Все <span className="text-red-600 dark:text-red-500">курсы</span> программирования
-          </h1>
-          <p
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
             className="text-xl text-black/70 mb-8 dark:text-zinc-400"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="200"
           >
             Выберите направление, которое подходит именно вам. Старт новых групп каждые 2 недели.
-          </p>
-          <div
-            className="flex flex-wrap justify-center gap-4"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="300"
-          >
-            <Button variant="outline">Для начинающих</Button>
-            <Button variant="outline">Для продвинутых</Button>
-            <Button variant="outline">С трудоустройством</Button>
-            <Button>Получить консультацию</Button>
-          </div>
-        </div>
+          </motion.p>
 
-        <div className="bg-gray-50/50 dark:bg-transparent transition-colors duration-300 rounded-3xl p-2 md:p-8">
-          <div id="secioncours" className="max-w-[1440px] mx-auto pb-10">
-            <div className="flex flex-col gap-[20px] mb-12">
-              <h2 className="text-[32px] md:text-[38px] font-bold dark:text-white">Наши программы обучения</h2>
-              <p className="text-[16px] text-[#8A8A8A] max-w-[800px] dark:text-zinc-400">
-                Курсы Learn IT – это практические знания, необходимые для успешной карьеры в ИТ-индустрии.
-              </p>
+          {/* Фильтры */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="flex flex-wrap justify-center gap-4 mb-8"
+          >
+            <div className="relative">
+              <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                type="text"
+                placeholder="Поиск курсов..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-4 py-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-red-500 w-64"
+              />
             </div>
 
-            {/* Сетка карточек */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {data.map((element, index) => (
-                <div
-                  key={element.id}
-                  className="bg-white border border-black/10 rounded-3xl p-6 hover:border-red-600/50 transition-all duration-300 hover:-translate-y-2 group dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30 shadow-sm hover:shadow-xl"
-                  data-aos="fade-up"
-                  data-aos-delay={index * 100}
-                >
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-red-50 text-red-700 mb-2 dark:bg-red-500/10 dark:text-red-400">
-                        Курс
-                      </span>
-                      <h3 className="text-xl font-bold text-black group-hover:text-red-600 transition-colors dark:text-white dark:group-hover:text-red-500">
-                        {element.nameCourse}
-                      </h3>
-                    </div>
-                    <div className="flex items-center gap-1 text-yellow-500">
-                      <StarIcon sx={{ fontSize: 18 }} />
-                      <span className="text-sm font-medium text-black dark:text-white">
-                        {element.rate}
-                      </span>
-                    </div>
-                  </div>
+            <select
+              value={selectedLevel}
+              onChange={(e) => setSelectedLevel(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-red-500"
+            >
+              {levels.map(level => (
+                <option key={level} value={level}>{level}</option>
+              ))}
+            </select>
 
-                  <div className="relative mb-4 overflow-hidden rounded-2xl h-44">
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-red-500"
+            >
+              <option value="default">По умолчанию</option>
+              <option value="price_asc">Цена: по возрастанию</option>
+              <option value="price_desc">Цена: по убыванию</option>
+              <option value="rating">По рейтингу</option>
+            </select>
+          </motion.div>
+
+          {/* Количество курсов */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+            className="text-sm text-gray-500"
+          >
+            Найдено курсов: {filteredData.length}
+          </motion.p>
+        </div>
+
+        {/* Сетка курсов */}
+        <div className="bg-gray-50/50 dark:bg-transparent transition-colors duration-300 rounded-3xl p-2 md:p-8">
+          <div className="max-w-[1440px] mx-auto pb-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredData.map((element, index) => (
+                <motion.div
+                  key={element.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white border border-black/10 rounded-3xl overflow-hidden hover:border-red-600/50 transition-all duration-300 hover:-translate-y-2 group dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30 shadow-sm hover:shadow-xl"
+                >
+                  {/* Изображение */}
+                  <div className="relative h-48 overflow-hidden">
                     <img
                       src={element.imageCourse}
                       alt={element.nameCourse}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                     />
-                  </div>
-
-                  <div className="text-black/70 text-sm dark:text-zinc-400 mb-6 line-clamp-3 min-h-[60px]">
-                    {parse(element.description)}
-                  </div>
-
-                  <div className="space-y-3 mb-6 border-t border-gray-100 dark:border-zinc-800 pt-4">
-                    <div className="flex items-center gap-2 text-sm text-black/60 dark:text-zinc-400">
-                      <CalendarMonthIcon sx={{ fontSize: 18 }} className="text-red-600 dark:text-red-500" />
-                      <span>Длительность: {element.months}</span>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    
+                    {/* Рейтинг */}
+                    <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 bg-white/90 backdrop-blur-sm rounded-full shadow-lg">
+                      <StarIcon sx={{ fontSize: 16 }} className="text-yellow-500" />
+                      <span className="text-sm font-bold text-gray-900">
+                        {element.rate}
+                      </span>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-black/60 dark:text-zinc-400">
-                      <PaymentsIcon sx={{ fontSize: 18 }} className="text-red-600 dark:text-red-500" />
-                      <span className="text-black font-bold dark:text-white">
-                        Стоимость: {element.price} сомони
+
+                    {/* Категория */}
+                    <div className="absolute bottom-3 left-3">
+                      <span className="px-3 py-1 text-xs font-medium rounded-full bg-red-500 text-white shadow-lg">
+                        Курс
                       </span>
                     </div>
                   </div>
 
-                  <div className="mb-8">
-                    <div className="flex flex-wrap gap-2">
-                      {element.tags?.split(',').map((tag, idx) => (
-                        <div key={idx} className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold text-black/50 dark:text-zinc-500 bg-gray-100 dark:bg-zinc-800 px-2 py-1 rounded-md">
-                          <CheckCircleOutlineIcon sx={{ fontSize: 12 }} className="text-red-600" />
-                          {tag.trim()}
-                        </div>
-                      ))}
+                  {/* Контент */}
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-black mb-3 group-hover:text-red-600 transition-colors dark:text-white dark:group-hover:text-red-500">
+                      {element.nameCourse}
+                    </h3>
+
+                    <div className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
+                      {parse(element.description)}
+                    </div>
+
+                    {/* Характеристики */}
+                    <div className="space-y-2 mb-4">
+                      <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                        <CalendarMonthIcon sx={{ fontSize: 18 }} className="text-red-500" />
+                        <span>Длительность: {element.months}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <PaymentsIcon sx={{ fontSize: 18 }} className="text-red-500" />
+                        <span className="font-bold text-gray-900 dark:text-white">
+                          {element.price} сомони
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Теги */}
+                    {element.tags && (
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {element.tags.split(',').slice(0, 3).map((tag, idx) => (
+                          <span
+                            key={idx}
+                            className="flex items-center gap-1 px-2 py-1 text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 rounded-md"
+                          >
+                            <CheckCircleOutlineIcon sx={{ fontSize: 12 }} className="text-red-500" />
+                            {tag.trim()}
+                          </span>
+                        ))}
+                        {element.tags.split(',').length > 3 && (
+                          <span className="px-2 py-1 text-xs bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-400 rounded-md">
+                            +{element.tags.split(',').length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Кнопки */}
+                    <div className="flex items-center gap-3 mt-4">
+                      <ReadMoreButton
+                        to={`/detail/course/${element.id}`}
+                        type="default"
+                        size="md"
+                        className="flex-1"
+                      >
+                        Подробнее
+                      </ReadMoreButton>
+                      
+                      <HashLink
+                        smooth
+                        to="/#contacts"
+                        className="p-3 bg-gray-100 dark:bg-zinc-800 rounded-xl hover:bg-red-500 hover:text-white transition-colors"
+                      >
+                        <ArrowForwardIcon sx={{ fontSize: 20 }} />
+                      </HashLink>
                     </div>
                   </div>
-
-                  <HashLink
-                    smooth
-                    to="/#contacts"
-                    className="flex items-center justify-between w-full px-6 py-4 bg-white text-black rounded-2xl border border-solid border-red-600 group/btn hover:bg-red-600 transition-all duration-300 dark:bg-zinc-900 dark:text-white dark:hover:bg-red-500 dark:hover:text-black"
-                  >
-                    <span className="font-bold text-sm">Записаться на курс</span>
-                    <ArrowForwardIcon className="group-hover/btn:translate-x-1 transition-transform" />
-                  </HashLink>
-                </div>
+                </motion.div>
               ))}
             </div>
+
+            {/* Если нет результатов */}
+            {filteredData.length === 0 && (
+              <div className="text-center py-20">
+                <div className="inline-block p-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl">
+                  <SearchIcon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">
+                    Курсы не найдены
+                  </p>
+                  <p className="text-gray-400 dark:text-gray-500 text-sm">
+                    Попробуйте изменить параметры поиска
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="text-center mt-16 pb-10">
-          <h2 className="text-2xl font-bold text-black mb-4 dark:text-white">
-            Не нашли подходящий курс?
-          </h2>
-          <p className="text-black/70 mb-8 max-w-2xl mx-auto dark:text-zinc-400">
-            Напишите нам, и мы поможем подобрать индивидуальную программу обучения под ваши цели.
-          </p>
-          <HashLink smooth to="/#contacts">
-            <Button size="lg" className="rounded-full px-10">Связаться с менеджером</Button>
-          </HashLink>
-        </div>
+        {/* Блок консультации */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-16 pb-10"
+        >
+          <div className="bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950/20 dark:to-red-900/20 rounded-3xl p-12 max-w-3xl mx-auto">
+            <h2 className="text-2xl font-bold text-black mb-3 dark:text-white">
+              Не нашли подходящий курс?
+            </h2>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Напишите нам, и мы поможем подобрать индивидуальную программу обучения под ваши цели.
+            </p>
+            <HashLink smooth to="/#contacts">
+              <Button size="lg" className="rounded-full px-10 shadow-lg hover:shadow-xl">
+                Связаться с менеджером
+              </Button>
+            </HashLink>
+          </div>
+        </motion.div>
       </Section>
     </div>
   )

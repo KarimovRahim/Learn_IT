@@ -13,7 +13,8 @@ import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
 import Aurora from '../Components/Aurora.jsx';
 import PartnerCard from '../Components/PartnerCard.jsx';
-import { ArrowRight, Code, Code2, TrendingUp, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react';
+import ReadMoreButton from '../Components/ReadMoreButton.jsx';
+import { ArrowRight, Code, Code2, TrendingUp, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, Eye, Bookmark, MapPin, Phone as PhoneIcon } from 'lucide-react';
 
 const partnersApi = "https://ehjoi-manaviyat.pockethost.io/api/collections/learn_it_parthners/records";
 
@@ -194,14 +195,14 @@ const Home = () => {
         data-aos="fade"
         data-aos-duration="1000"
       >
-        {/* Фоновый градиент - тёплый персиковый градиент (всегда виден как запасной вариант) */}
+        {/* Фоновый градиент - тёплый персиковый градиент */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-50 via-orange-50 to-rose-50 dark:from-zinc-900 dark:via-zinc-900 dark:to-zinc-900"></div>
         </div>
 
-        {/* Фон с Aurora эффектом - яркие красные оттенки для светлой темы */}
+        {/* Фон с Aurora эффектом */}
         <div className="absolute inset-0 z-1 pointer-events-none">
-          {/* Основной слой - ярко-розовый */}
+          {/* Слои для светлой темы */}
           <Aurora
             colorStops={['#ffb3b3', '#ff9999', '#ff8080']}
             amplitude={1.3}
@@ -209,8 +210,6 @@ const Home = () => {
             speed={3.0}
             className="opacity-60 md:opacity-80 dark:opacity-0 dark:md:opacity-0"
           />
-
-          {/* Второй слой - коралловый */}
           <Aurora
             colorStops={['#ff9999', '#ff8080', '#ff6666']}
             amplitude={1.1}
@@ -218,8 +217,6 @@ const Home = () => {
             speed={2.7}
             className="opacity-50 md:opacity-70 dark:opacity-0 dark:md:opacity-0"
           />
-
-          {/* Третий слой - ярко-красный */}
           <Aurora
             colorStops={['#ff8080', '#ff6666', '#ff4d4d']}
             amplitude={0.9}
@@ -228,7 +225,7 @@ const Home = () => {
             className="opacity-40 md:opacity-60 dark:opacity-0 dark:md:opacity-0"
           />
 
-          {/* Для тёмной темы - насыщенные красные оттенки */}
+          {/* Слои для тёмной темы */}
           <Aurora
             colorStops={['#ff4d4d', '#ff3333', '#ff1a1a']}
             amplitude={1.5}
@@ -236,7 +233,6 @@ const Home = () => {
             speed={3.2}
             className="hidden dark:block opacity-0 dark:opacity-80 dark:md:opacity-100"
           />
-
           <Aurora
             colorStops={['#ff6666', '#ff4d4d', '#ff3333']}
             amplitude={1.2}
@@ -244,7 +240,6 @@ const Home = () => {
             speed={2.8}
             className="hidden dark:block opacity-0 dark:opacity-60 dark:md:opacity-80"
           />
-
           <Aurora
             colorStops={['#ff8080', '#ff6666', '#ff4d4d']}
             amplitude={1.0}
@@ -254,17 +249,17 @@ const Home = () => {
           />
         </div>
 
-        {/* Основной контент с колонками */}
+        {/* Основной контент */}
         <div className="container mx-auto px-4 md:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[calc(100vh-5rem)]">
-            {/* Левая колонка - текст */}
+            {/* Левая колонка */}
             <div
               className="order-2 lg:order-1"
               data-aos="fade-right"
               data-aos-duration="800"
               data-aos-delay="200"
             >
-              {/* Бейдж с набором - тёплый красный */}
+              {/* Бейдж */}
               <div
                 className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-red-100 border border-red-200 text-red-600 text-sm font-medium mb-6 dark:bg-red-500/20 dark:border-red-500/30 dark:text-red-400"
                 data-aos="fade-up"
@@ -278,9 +273,9 @@ const Home = () => {
                 Набор на новый поток открыт
               </div>
 
-              {/* Заголовок - тёплый тёмно-коричневый */}
+              {/* Заголовок */}
               <h1
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-amber-950 dark:text-white leading-[1.1] tracking-tight mb-6"
+                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white dark:text-white leading-[1.1] tracking-tight mb-4"
                 data-aos="fade-up"
                 data-aos-duration="900"
                 data-aos-delay="400"
@@ -292,7 +287,45 @@ const Home = () => {
                 <span className="text-red-500 dark:text-red-400">Learn IT</span>
               </h1>
 
-              {/* Описание - тёплый коричневый */}
+              {/* 🔥 НОВЫЕ СЛОГАНЫ */}
+              <div
+                className="flex flex-wrap lg:flex-nowrap justify-center lg:justify-start items-center gap-2 sm:gap-3 mb-6"
+                data-aos="fade-up"
+                data-aos-duration="800"
+                data-aos-delay="450"
+              >
+                {/* LEARN IT */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 rounded-md blur-md opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <div className="relative px-3 py-1.5 sm:px-4 sm:py-2 bg-white/90 backdrop-blur-sm border border-red-200 rounded-md shadow-md dark:bg-zinc-900/90 dark:border-red-500/30">
+                    <span className="text-sm sm:text-base md:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500 dark:from-red-400 dark:to-red-500 whitespace-nowrap">
+                      LEARN IT
+                    </span>
+                  </div>
+                </div>
+
+                {/* TRY IT */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 rounded-md blur-md opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <div className="relative px-3 py-1.5 sm:px-4 sm:py-2 bg-white/90 backdrop-blur-sm border border-red-200 rounded-md shadow-md dark:bg-zinc-900/90 dark:border-red-500/30">
+                    <span className="text-sm sm:text-base md:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500 dark:from-red-400 dark:to-red-500 whitespace-nowrap">
+                      TRY IT
+                    </span>
+                  </div>
+                </div>
+
+                {/* MAKE IT WORK */}
+                <div className="group relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-500 to-red-600 rounded-md blur-md opacity-30 group-hover:opacity-50 transition-opacity duration-300"></div>
+                  <div className="relative px-3 py-1.5 sm:px-4 sm:py-2 bg-white/90 backdrop-blur-sm border border-red-200 rounded-md shadow-md dark:bg-zinc-900/90 dark:border-red-500/30">
+                    <span className="text-sm sm:text-base md:text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-600 to-red-500 dark:from-red-400 dark:to-red-500 whitespace-nowrap">
+                      MAKE IT WORK
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Описание */}
               <p
                 className="text-lg md:text-xl text-amber-800 dark:text-zinc-400 mb-8 max-w-2xl leading-relaxed"
                 data-aos="fade-up"
@@ -311,10 +344,7 @@ const Home = () => {
                 data-aos-delay="600"
               >
                 <div>
-                  <HashLink
-                    smooth
-                    to="#contacts"
-                  >
+                  <HashLink smooth to="#contacts">
                     <Button
                       size="lg"
                       className="group bg-red-500 hover:bg-red-600 text-white dark:bg-red-500 dark:hover:bg-red-600 shadow-lg hover:shadow-xl transition-all"
@@ -325,9 +355,7 @@ const Home = () => {
                   </HashLink>
                 </div>
                 <div>
-                  <Link
-                    to="/courses"
-                  >
+                  <Link to="/courses">
                     <Button
                       variant="outline"
                       size="lg"
@@ -349,19 +377,19 @@ const Home = () => {
               data-aos-offset="100"
             >
               <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                {/* Красное свечение за логотипом для светлой темы */}
+                {/* Красное свечение */}
                 <div className="absolute inset-0 flex items-center justify-center dark:hidden">
                   <div className="w-[80%] h-[80%] bg-gradient-to-r from-red-400/30 to-red-500/30 rounded-full blur-2xl" />
                 </div>
 
-                {/* Логотип с красной тенью */}
+                {/* Логотип */}
                 <img
                   src={log}
                   alt="Learn IT Academy"
                   className="w-full h-auto object-contain relative z-10
-        drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]
-        dark:drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]
-        dark:brightness-100 dark:invert-0"
+              drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]
+              dark:drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]
+              dark:brightness-100 dark:invert-0"
                 />
 
                 {/* Декоративные элементы */}
@@ -371,7 +399,6 @@ const Home = () => {
                   data-aos-duration="1000"
                   data-aos-delay="500"
                 />
-
                 <div
                   className="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-br from-amber-300/40 to-amber-400/40 rounded-full blur-3xl dark:bg-orange-500/20"
                   data-aos="fade-right"
@@ -461,15 +488,19 @@ const Home = () => {
             </div>
 
             <Swiper
-              modules={[Pagination, Navigation]}
+              modules={[Pagination, Navigation, Autoplay]}
               spaceBetween={25}
               slidesPerView={1}
-              // Привязываем кастомные кнопки
               navigation={{
                 prevEl: '.swiper-prev-btn',
                 nextEl: '.swiper-next-btn',
               }}
               pagination={{ clickable: true, dynamicBullets: true }}
+              autoplay={{
+                delay: 5000,
+                disableOnInteraction: false,
+                pauseOnMouseEnter: true,
+              }}
               breakpoints={{
                 640: { slidesPerView: 2 },
                 1024: { slidesPerView: 3 },
@@ -479,8 +510,10 @@ const Home = () => {
             >
               {data.map((course) => (
                 <SwiperSlide key={course.id} className="h-auto">
-                  <div className="group bg-white h-full border border-gray-100 hover:border-transparent rounded-2xl p-8 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:bg-zinc-900 dark:border-zinc-800 flex flex-col relative overflow-hidden">
-
+                  <motion.div
+                    whileHover={{ y: -5 }}
+                    className="group bg-white h-full border border-gray-100 hover:border-transparent rounded-2xl p-8 transition-all duration-500 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] dark:bg-zinc-900 dark:border-zinc-800 flex flex-col relative overflow-hidden"
+                  >
                     {/* Декоративный элемент фона при наведении */}
                     <div className="absolute -right-4 -top-4 w-24 h-24 bg-red-50 rounded-full scale-0 group-hover:scale-100 transition-transform duration-500 -z-0 dark:bg-red-900/10" />
 
@@ -497,53 +530,71 @@ const Home = () => {
                         {typeof course.description === 'string' ? parse(course.description) : course.description}
                       </div>
 
+                      {/* Преимущества в виде красивых чипсов */}
                       <ul className="space-y-3 mb-8">
                         {course.benefits.slice(0, 3).map((benefit, idx) => (
-                          <li key={idx} className="flex items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400">
-                            <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                          <motion.li
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: idx * 0.1 }}
+                            className="flex items-center gap-3 text-xs font-semibold text-zinc-600 dark:text-zinc-400"
+                          >
+                            <div className="w-1.5 h-1.5 rounded-full bg-red-500 group-hover:scale-150 transition-transform" />
                             {benefit.trim()}
-                          </li>
+                          </motion.li>
                         ))}
                       </ul>
 
                       <div className="pt-6 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between mt-auto">
-                        <span className="text-lg font-bold text-zinc-900 dark:text-white">
-                          {course.price} <span className="text-xs font-medium text-zinc-400 uppercase ml-1">смн</span>
-                        </span>
+                        <div>
+                          <span className="text-sm text-zinc-500 dark:text-zinc-400">Цена</span>
+                          <span className="text-lg font-bold text-zinc-900 dark:text-white block">
+                            {course.price} <span className="text-xs font-medium text-zinc-400 uppercase ml-1">смн</span>
+                          </span>
+                        </div>
 
-                        <HashLink
-                          smooth
-                          to="#contacts"
-                          className="text-sm font-bold text-red-600 flex items-center gap-1 hover:gap-2 transition-all"
+                        <ReadMoreButton
+                          to={`/detail/course/${course.id}`}
+                          type="default"
                         >
-                          Записаться <ArrowForwardIcon sx={{ fontSize: 18 }} />
-                        </HashLink>
+                          Подробнее
+                        </ReadMoreButton>
                       </div>
                     </div>
-                  </div>
+
+                    {/* Индикатор популярности */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.3 }}
+                      className="absolute top-4 left-4 px-2 py-1 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs font-bold rounded-full"
+                    >
+                      Популярный
+                    </motion.div>
+                  </motion.div>
                 </SwiperSlide>
               ))}
             </Swiper>
           </div>
 
           <style>{`
-        .swiper-pagination-bullet {
-          width: 8px;
-          height: 8px;
-          background: #d1d1d1 !important;
-          opacity: 1 !important;
-        }
-        .swiper-pagination-bullet-active {
-          background: #dc3545 !important;
-          width: 24px !important;
-          border-radius: 4px !important;
-          transition: all 0.3s ease;
-        }
-        /* Скрываем стандартные стрелки swiper, если они появятся */
-        .swiper-button-next, .swiper-button-prev {
-          display: none !important;
-        }
-      `}</style>
+      .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+        background: #d1d1d1 !important;
+        opacity: 1 !important;
+      }
+      .swiper-pagination-bullet-active {
+        background: #dc3545 !important;
+        width: 24px !important;
+        border-radius: 4px !important;
+        transition: all 0.3s ease;
+      }
+      .swiper-button-next, .swiper-button-prev {
+        display: none !important;
+      }
+    `}</style>
         </div>
       </Section>
 
@@ -772,20 +823,37 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {news.length > 0 ? (
               news.map((item, index) => (
-                <div
+                <motion.div
                   key={item.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
                   className="bg-white border border-black/10 rounded-2xl p-6 hover:border-red-600/50 transition-all duration-300 hover:-translate-y-2 group dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30"
                   data-aos="fade-up"
                   data-aos-duration="600"
                   data-aos-delay={150 + index * 100}
                 >
                   {item.image && (
-                    <div className="mb-4 overflow-hidden rounded-xl">
+                    <div className="mb-4 overflow-hidden rounded-xl relative">
                       <img
                         src={`https://ehjoi-manaviyat.pockethost.io/api/files/learn_it_news/${item.id}/${item.image}`}
                         alt={item.newsTopic || "news"}
                         className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
+                      {/* Оверлей с градиентом при наведении */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+
+                      {/* Индикатор "Новое" для свежих новостей */}
+                      {index < 2 && (
+                        <motion.div
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.5 }}
+                          className="absolute top-2 right-2 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full"
+                        >
+                          NEW
+                        </motion.div>
+                      )}
                     </div>
                   )}
 
@@ -799,8 +867,8 @@ const Home = () => {
                         {Math.floor(Math.random() * 1000) + 100}
                       </span>
                       <span className="flex items-center gap-1">
-                        <Heart className="w-3 h-3" />
-                        {Math.floor(Math.random() * 100) + 10}
+                        <Eye className="w-3 h-3" />
+                        {Math.floor(Math.random() * 500) + 50}
                       </span>
                     </div>
                   </div>
@@ -838,7 +906,42 @@ const Home = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+
+                  {/* Интерактивная секция с кнопкой */}
+                  <div className="mt-4 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Здесь можно добавить логику для лайков
+                        }}
+                      >
+                        <Heart className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
+                      </motion.button>
+                      <motion.button
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Здесь можно добавить логику для сохранения
+                        }}
+                      >
+                        <Bookmark className="w-4 h-4 text-gray-400 hover:text-red-500 transition-colors" />
+                      </motion.button>
+                    </div>
+
+                    <ReadMoreButton
+                      to={`/detail/news/${item.id}`}
+                      type="outline"
+                    >
+                      Читать далее
+                    </ReadMoreButton>
+                  </div>
+                </motion.div>
               ))
             ) : (
               <div className="col-span-full text-center py-20">
@@ -908,79 +1011,79 @@ const Home = () => {
         </div>
       </Section>
 
-{/* Partners Section */}
-<Section
-  className="bg-white dark:bg-transparent"
-  data-aos="fade-up"
-  data-aos-duration="1000"
-  data-aos-offset="200"
->
-  <div className="text-center mb-16">
-    <div
-      className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-4 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
-      data-aos="fade-up"
-      data-aos-duration="600"
-    >
-      <TrendingUp className="w-4 h-4" />
-      Наши партнёры
-    </div>
-    <h2
-      className="text-3xl md:text-4xl font-bold text-black mb-4 dark:text-white"
-      data-aos="fade-up"
-      data-aos-duration="700"
-    >
-      Компании, которые нам <span className="text-red-600 dark:text-red-500">доверяют</span>
-    </h2>
-    <p
-      className="text-black/70 max-w-2xl mx-auto dark:text-zinc-400"
-      data-aos="fade-up"
-      data-aos-duration="700"
-      data-aos-delay="100"
-    >
-      Ведущие IT-компании, где работают наши выпускники и с которыми мы активно сотрудничаем
-    </p>
-  </div>
+      {/* Partners Section */}
+      <Section
+        className="bg-white dark:bg-transparent"
+        data-aos="fade-up"
+        data-aos-duration="1000"
+        data-aos-offset="200"
+      >
+        <div className="text-center mb-16">
+          <div
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-4 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
+            data-aos="fade-up"
+            data-aos-duration="600"
+          >
+            <TrendingUp className="w-4 h-4" />
+            Наши партнёры
+          </div>
+          <h2
+            className="text-3xl md:text-4xl font-bold text-black mb-4 dark:text-white"
+            data-aos="fade-up"
+            data-aos-duration="700"
+          >
+            Компании, которые нам <span className="text-red-600 dark:text-red-500">доверяют</span>
+          </h2>
+          <p
+            className="text-black/70 max-w-2xl mx-auto dark:text-zinc-400"
+            data-aos="fade-up"
+            data-aos-duration="700"
+            data-aos-delay="100"
+          >
+            Ведущие IT-компании, где работают наши выпускники и с которыми мы активно сотрудничаем
+          </p>
+        </div>
 
-  {isLoading.partners ? (
-    <div className="flex justify-center items-center py-20">
-      <div className="inline-block w-12 h-12 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
-    </div>
-  ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-      {partners.length > 0 ? (
-        partners.map((partner, index) => (
-          <PartnerCard
-            key={partner.id}
-            partner={partner}
-            index={index}
-            delay={100 + index * 50}
-          />
-        ))
-      ) : (
-        // Запасные партнёры если API пустой
-        [
-          { name: 'TechCorp', description: 'IT-компания' },
-          { name: 'InnoSoft', description: 'Разработка ПО' },
-          { name: 'DevStudio', description: 'Веб-студия' },
-          { name: 'CloudSystems', description: 'Облачные технологии' }
-        ].map((partner, index) => (
-          <PartnerCard
-            key={`fallback-${index}`}
-            partner={{
-              id: `fallback-${index}`,
-              name: partner.name,
-              description: partner.description,
-              website: '#',
-              logo: null
-            }}
-            index={index}
-            delay={100 + index * 50}
-          />
-        ))
-      )}
-    </div>
-  )}
-</Section>
+        {isLoading.partners ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="inline-block w-12 h-12 border-4 border-red-200 border-t-red-600 rounded-full animate-spin"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {partners.length > 0 ? (
+              partners.map((partner, index) => (
+                <PartnerCard
+                  key={partner.id}
+                  partner={partner}
+                  index={index}
+                  delay={100 + index * 50}
+                />
+              ))
+            ) : (
+              // Запасные партнёры если API пустой
+              [
+                { name: 'TechCorp', description: 'IT-компания' },
+                { name: 'InnoSoft', description: 'Разработка ПО' },
+                { name: 'DevStudio', description: 'Веб-студия' },
+                { name: 'CloudSystems', description: 'Облачные технологии' }
+              ].map((partner, index) => (
+                <PartnerCard
+                  key={`fallback-${index}`}
+                  partner={{
+                    id: `fallback-${index}`,
+                    name: partner.name,
+                    description: partner.description,
+                    website: '#',
+                    logo: null
+                  }}
+                  index={index}
+                  delay={100 + index * 50}
+                />
+              ))
+            )}
+          </div>
+        )}
+      </Section>
 
       {/* Contact Section */}
       <Section

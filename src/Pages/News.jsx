@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from 'react'
 import { HashLink } from 'react-router-hash-link';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import Section from '../Components/UI/Section'
 import Button from '../Components/UI/Button'
-import { Calendar, User, Clock, Tag, ArrowRight, TrendingUp, BookOpen, MessageSquare, Newspaper, Share2, Heart } from 'lucide-react'
+import ReadMoreButton from '../Components/ReadMoreButton.jsx';
+import { 
+  Calendar, User, Clock, Tag, ArrowRight, TrendingUp, 
+  BookOpen, MessageSquare, Newspaper, Share2, Heart, 
+  Eye, Bookmark, Search, Filter, X 
+} from 'lucide-react'
 
 const newsApi = "https://ehjoi-manaviyat.pockethost.io/api/collections/learn_it_news/records";
 
 const News = () => {
   const [news, setNews] = useState([]);
+  const [filteredNews, setFilteredNews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('Все');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [likedItems, setLikedItems] = useState({});
+  const [savedItems, setSavedItems] = useState({});
 
   const months = [
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря"
   ];
+
+  // Получаем все уникальные категории из новостей
+  const categories = ['Все', ...new Set(news.map(item => item.newsTopic || 'Новость'))];
 
   const getNews = async () => {
     try {
@@ -27,9 +42,11 @@ const News = () => {
       );
 
       setNews(sorted);
+      setFilteredNews(sorted);
     } catch (error) {
       console.error("Ошибка при получении новостей:", error);
       setNews([]);
+      setFilteredNews([]);
     } finally {
       setIsLoading(false);
     }
@@ -39,16 +56,13 @@ const News = () => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     if (isNaN(date.getTime())) return "некорректная дата";
-
     const day = date.getDate();
     const month = months[date.getMonth()];
     const year = date.getFullYear();
-
     return `${day} ${month} ${year}`;
   };
 
   const formatReadTime = (content) => {
-    // Примерный подсчет времени чтения (1 минута на 200 символов)
     const textLength = content?.length || 0;
     const minutes = Math.max(1, Math.ceil(textLength / 200));
     return `${minutes} мин`;
@@ -58,11 +72,39 @@ const News = () => {
     getNews();
   }, []);
 
-  // Статические теги (можно оставить или тоже получать из API)
-  const popularTags = [
-    'Разработка', 'Дизайн', 'Карьера', 'Обучение', 'Технологии',
-    'Python', 'JavaScript', 'React', 'Mobile', 'Startup'
-  ];
+  // Фильтрация новостей
+  useEffect(() => {
+    let filtered = [...news];
+    
+    // Фильтр по категории
+    if (selectedCategory !== 'Все') {
+      filtered = filtered.filter(item => item.newsTopic === selectedCategory);
+    }
+    
+    // Фильтр по поиску
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(item => 
+        (item.newsTopic?.toLowerCase().includes(query)) ||
+        (item.info?.toLowerCase().includes(query))
+      );
+    }
+    
+    setFilteredNews(filtered);
+  }, [selectedCategory, searchQuery, news]);
+
+  const handleLike = (id) => {
+    setLikedItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleSave = (id) => {
+    setSavedItems(prev => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const clearFilters = () => {
+    setSelectedCategory('Все');
+    setSearchQuery('');
+  };
 
   return (
     <div className="pt-20">
@@ -71,38 +113,90 @@ const News = () => {
         data-aos="fade"
         data-aos-duration="1000"
       >
+        {/* Заголовок */}
         <div
-          className="text-center max-w-3xl mx-auto mb-16"
+          className="text-center max-w-3xl mx-auto mb-12"
           data-aos="fade-up"
           data-aos-duration="800"
         >
-          <div
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-6 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="100"
           >
             <Newspaper className="w-4 h-4" />
             Самые свежие материалы из мира IT
-          </div>
+          </motion.div>
           <h1
             className="text-4xl md:text-5xl font-bold text-black mb-6 dark:text-white"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="150"
           >
             <span className="text-red-600 dark:text-red-500">Новости</span> и статьи
           </h1>
           <p
             className="text-xl text-black/70 dark:text-zinc-400"
-            data-aos="fade-up"
-            data-aos-duration="700"
-            data-aos-delay="200"
           >
             Самые свежие материалы о технологиях, карьере и обучении в IT
           </p>
         </div>
 
+        {/* Фильтры и поиск */}
+        <div className="max-w-6xl mx-auto mb-12 space-y-4">
+          {/* Поиск */}
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Поиск новостей..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-red-500 dark:focus:border-red-500 transition-colors"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2"
+              >
+                <X className="w-4 h-4 text-gray-400 hover:text-red-500" />
+              </button>
+            )}
+          </div>
+
+          {/* Категории */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.slice(0, 6).map((category) => (
+              <motion.button
+                key={category}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  selectedCategory === category
+                    ? 'bg-red-500 text-white shadow-lg shadow-red-500/25'
+                    : 'bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20 border border-gray-200 dark:border-zinc-800'
+                }`}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Информация о количестве и кнопка сброса */}
+          {(selectedCategory !== 'Все' || searchQuery) && (
+            <div className="flex justify-center items-center gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <span>Найдено: {filteredNews.length} новостей</span>
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 text-red-500 hover:text-red-600 transition-colors"
+              >
+                <X className="w-4 h-4" />
+                Сбросить фильтры
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* Сетка новостей */}
         {isLoading ? (
           <div className="flex justify-center items-center min-h-[400px]">
             <div className="text-center">
@@ -112,140 +206,173 @@ const News = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {news.length > 0 ? (
-              news.map((item, index) => (
-                <div
+            {filteredNews.length > 0 ? (
+              filteredNews.map((item, index) => (
+                <motion.div
                   key={item.id}
-                  className="bg-white border border-black/10 rounded-2xl p-6 hover:border-red-600/50 transition-all duration-300 hover:-translate-y-2 group dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30"
-                  data-aos="fade-up"
-                  data-aos-duration="600"
-                  data-aos-delay={150 + index * 100}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="bg-white border border-black/10 rounded-2xl overflow-hidden hover:border-red-600/50 transition-all duration-300 hover:-translate-y-2 group dark:bg-zinc-900 dark:border-zinc-800 dark:hover:border-red-500/30 shadow-sm hover:shadow-xl"
                 >
+                  {/* Изображение */}
                   {item.image && (
-                    <div className="mb-4 overflow-hidden rounded-xl">
+                    <div className="relative h-48 overflow-hidden">
                       <img
                         src={`https://ehjoi-manaviyat.pockethost.io/api/files/learn_it_news/${item.id}/${item.image}`}
                         alt={item.newsTopic || "news"}
-                        className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      
+                      {/* Индикатор свежести */}
+                      {index < 3 && (
+                        <motion.div
+                          initial={{ x: 100 }}
+                          animate={{ x: 0 }}
+                          transition={{ delay: 0.5 }}
+                          className="absolute top-3 right-3 px-2 py-1 bg-red-500 text-white text-xs font-bold rounded-full"
+                        >
+                          NEW
+                        </motion.div>
+                      )}
                     </div>
                   )}
 
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-gray-100 text-black/70 dark:bg-zinc-800 dark:text-zinc-300">
-                      {item.newsTopic || "Новость"}
-                    </span>
-                    <div className="flex items-center gap-3 text-sm text-black/50 dark:text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <MessageSquare className="w-3 h-3" />
-                        {Math.floor(Math.random() * 1000) + 100}
+                  <div className="p-6">
+                    {/* Категория и статистика */}
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="px-3 py-1 text-xs font-medium rounded-full bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400">
+                        {item.newsTopic || "Новость"}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Heart className="w-3 h-3" />
-                        {Math.floor(Math.random() * 100) + 10}
-                      </span>
-                    </div>
-                  </div>
-
-                  <h3 className="text-xl font-bold text-black mb-3 group-hover:text-red-600 transition-colors line-clamp-2 dark:text-white dark:group-hover:text-red-500">
-                    {item.newsTopic || "Новость"}
-                  </h3>
-
-                  <p className="text-black/70 mb-4 line-clamp-3 dark:text-zinc-400">
-                    {item.info ? (
-                      typeof item.info === 'string' ?
-                        item.info.replace(/<[^>]*>/g, '').substring(0, 150) + '...' :
-                        'Описание отсутствует'
-                    ) : (
-                      'Описание отсутствует'
-                    )}
-                  </p>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-black/10 dark:border-zinc-800">
-                    <div className="text-sm text-black/50 dark:text-zinc-500">
                       <div className="flex items-center gap-2">
-                        <User className="w-3 h-3" />
-                        Learn IT Academy
+                        <span className="flex items-center gap-1 text-xs text-gray-500">
+                          <Eye className="w-3 h-3" />
+                          {Math.floor(Math.random() * 500) + 50}
+                        </span>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-sm text-black/50 dark:text-zinc-500">
-                      <span className="flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        {formatDate(item.published)}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        {formatReadTime(item.info)}
-                      </span>
+                    {/* Заголовок */}
+                    <h3 className="text-xl font-bold text-black mb-3 group-hover:text-red-600 transition-colors line-clamp-2 dark:text-white dark:group-hover:text-red-500">
+                      {item.newsTopic || "Новость"}
+                    </h3>
+
+                    {/* Описание */}
+                    <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3 text-sm">
+                      {item.info ? (
+                        typeof item.info === 'string' ?
+                          item.info.replace(/<[^>]*>/g, '').substring(0, 120) + '...' :
+                          'Описание отсутствует'
+                      ) : (
+                        'Описание отсутствует'
+                      )}
+                    </p>
+
+                    {/* Мета-информация */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-zinc-800">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-gradient-to-br from-red-500 to-red-600 flex items-center justify-center text-white text-xs font-bold">
+                          LI
+                        </div>
+                        <span className="text-xs text-gray-500">Learn IT</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="w-3 h-3" />
+                          {formatDate(item.published)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {formatReadTime(item.info)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Интерактивные кнопки */}
+                    <div className="mt-4 flex items-center justify-between">
+                      <div className="flex items-center gap-1">
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleLike(item.id)}
+                          className="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        >
+                          <Heart 
+                            className={`w-4 h-4 transition-colors ${
+                              likedItems[item.id] 
+                                ? 'fill-red-500 text-red-500' 
+                                : 'text-gray-400 hover:text-red-500'
+                            }`} 
+                          />
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={() => handleSave(item.id)}
+                          className="p-2 rounded-full hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        >
+                          <Bookmark 
+                            className={`w-4 h-4 transition-colors ${
+                              savedItems[item.id] 
+                                ? 'fill-red-500 text-red-500' 
+                                : 'text-gray-400 hover:text-red-500'
+                            }`} 
+                          />
+                        </motion.button>
+                      </div>
+
+                      <ReadMoreButton 
+                        to={`/detail/news/${item.id}`}
+                        type="outline"
+                        size="sm"
+                      >
+                        Читать
+                      </ReadMoreButton>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))
             ) : (
               <div className="col-span-full text-center py-20">
-                <p className="text-black/70 dark:text-zinc-400 text-lg">
-                  Новостей пока нет. Скоро появятся!
-                </p>
+                <div className="inline-block p-8 bg-white dark:bg-zinc-900 rounded-2xl shadow-xl">
+                  <Newspaper className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 dark:text-gray-400 text-lg mb-2">
+                    Новостей не найдено
+                  </p>
+                  <p className="text-gray-400 dark:text-gray-500 text-sm mb-4">
+                    Попробуйте изменить параметры поиска
+                  </p>
+                  <Button variant="outline" onClick={clearFilters}>
+                    Сбросить фильтры
+                  </Button>
+                </div>
               </div>
             )}
           </div>
         )}
 
-        <div
-          className="text-center"
-          data-aos="fade-up"
-          data-aos-duration="800"
-          data-aos-delay="200"
-        >
-          <div
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-50 border border-red-200 text-red-700 text-sm font-medium mb-6 dark:bg-red-500/10 dark:border-red-500/20 dark:text-red-400"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="250"
-          >
-            <MessageSquare className="w-4 h-4" />
+        {/* Подписка */}
+        <div className="text-center max-w-2xl mx-auto py-16 px-4 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950/20 dark:to-red-900/20 rounded-3xl">
+          <MessageSquare className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-bold text-black mb-3 dark:text-white">
             Будьте в курсе последних новостей
-          </div>
-
-          <h2
-            className="text-2xl font-bold text-black mb-6 dark:text-white"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="300"
-          >
-            Подпишитесь на рассылку
           </h2>
-          <p
-            className="text-black/70 mb-8 max-w-2xl mx-auto dark:text-zinc-400"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="350"
-          >
-            Получайте самые интересные статьи и новости из мира IT прямо на почту
+          <p className="text-gray-600 dark:text-gray-400 mb-6">
+            Подпишитесь на нашу рассылку и получайте самые интересные статьи первыми
           </p>
-
-          <div
-            className="max-w-md mx-auto flex justify-center gap-4"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="400"
-          >
-            <HashLink
-              smooth
-              to="/#contacts"
-            >
-              <Button size="lg">Связаться с менеджером</Button>
-            </HashLink>
+          <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <input
+              type="email"
+              placeholder="Ваш email"
+              className="flex-1 px-4 py-3 bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl focus:outline-none focus:border-red-500"
+            />
+            <Button className="whitespace-nowrap">
+              Подписаться
+            </Button>
           </div>
-
-          <p
-            className="text-xs text-black/50 mt-4 dark:text-zinc-500"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay="450"
-          >
-            Отправляя email, вы соглашаетесь с нашей политикой конфиденциальности
+          <p className="text-xs text-gray-500 mt-4">
+            Отправляя email, вы соглашаетесь с политикой конфиденциальности
           </p>
         </div>
       </Section>
