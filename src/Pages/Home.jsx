@@ -12,8 +12,7 @@ import Amir from '../assets/amir.jpg'
 import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
 import Aurora from '../Components/Aurora.jsx';
-import { ArrowRight, Code, Code2, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
-import { Calendar, Tag, User, TrendingUp, MessageSquare, Newspaper, Share2, Heart } from 'lucide-react'
+import { ArrowRight, Code, Code2, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, TrendingUp, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react'
 
 const partnersApi = "https://ehjoi-manaviyat.pockethost.io/api/collections/learn_it_parthners/records";
 
