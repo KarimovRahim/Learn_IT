@@ -184,7 +184,7 @@ const BurgerMenu = () => {
   const burgerButton = (
     <button
       onClick={toggleMenu}
-      className="md:hidden relative w-10 h-10 flex items-center justify-center text-white hover:text-red-500 dark:hover:text-red-500 transition-all duration-300 group z-50"
+      className="md:hidden relative w-10 h-10 flex items-center justify-center text-black dark:text-white hover:text-red-500 dark:hover:text-red-500 transition-all duration-300 group z-50"
       aria-label="Меню"
       aria-expanded={isOpen}
     >
