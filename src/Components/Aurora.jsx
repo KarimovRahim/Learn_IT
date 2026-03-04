@@ -18,6 +18,7 @@ uniform float uAmplitude;
 uniform vec3 uColorStops[3];
 uniform vec2 uResolution;
 uniform float uBlend;
+uniform float uOpacity;
 
 out vec4 fragColor;
 
@@ -95,7 +96,8 @@ void main() {
   vec3 rampColor;
   COLOR_RAMP(colors, uv.x, rampColor);
   
-  float height = snoise(vec2(uv.x * 2.0 + uTime * 0.1, uTime * 0.25)) * 0.5 * uAmplitude;
+  // Увеличиваем скорость движения в 2 раза
+  float height = snoise(vec2(uv.x * 2.0 + uTime * 0.2, uTime * 0.5)) * 0.5 * uAmplitude;
   height = exp(height);
   height = (uv.y * 2.0 - height + 0.2);
   float intensity = 0.6 * height;
@@ -105,7 +107,10 @@ void main() {
   
   vec3 auroraColor = intensity * rampColor;
   
-  fragColor = vec4(auroraColor * auroraAlpha, auroraAlpha);
+  // Применяем общую прозрачность
+  float finalAlpha = auroraAlpha * uOpacity;
+  
+  fragColor = vec4(auroraColor * finalAlpha, finalAlpha);
 }
 `;
 
@@ -116,14 +121,16 @@ const Aurora = ({
   speed = 1.0,
   time = 0,
   className = '',
-  style = {}
+  style = {},
+  opacity = 1.0,
+  theme = 'dark' // 'dark' или 'light'
 }) => {
   const ctnDom = useRef(null);
-  const propsRef = useRef({ colorStops, amplitude, blend, speed, time });
+  const propsRef = useRef({ colorStops, amplitude, blend, speed, time, opacity, theme });
   
   useEffect(() => {
-    propsRef.current = { colorStops, amplitude, blend, speed, time };
-  }, [colorStops, amplitude, blend, speed, time]);
+    propsRef.current = { colorStops, amplitude, blend, speed, time, opacity, theme };
+  }, [colorStops, amplitude, blend, speed, time, opacity, theme]);
 
   useEffect(() => {
     const ctn = ctnDom.current;
@@ -173,7 +180,8 @@ const Aurora = ({
         uAmplitude: { value: amplitude },
         uColorStops: { value: colorStopsArray },
         uResolution: { value: [ctn.offsetWidth, ctn.offsetHeight] },
-        uBlend: { value: blend }
+        uBlend: { value: blend },
+        uOpacity: { value: opacity }
       }
     });
 
@@ -189,9 +197,11 @@ const Aurora = ({
       const currentProps = propsRef.current;
       const elapsed = (performance.now() - startTime) * 0.001; // в секундах
       
-      program.uniforms.uTime.value = (currentProps.time + elapsed) * currentProps.speed * 0.1;
+      // Увеличиваем скорость в 2 раза (speed * 0.2 вместо speed * 0.1)
+      program.uniforms.uTime.value = (currentProps.time + elapsed) * currentProps.speed * 0.2;
       program.uniforms.uAmplitude.value = currentProps.amplitude;
       program.uniforms.uBlend.value = currentProps.blend;
+      program.uniforms.uOpacity.value = currentProps.opacity;
       
       const stops = currentProps.colorStops;
       program.uniforms.uColorStops.value = stops.map(hex => {
@@ -213,7 +223,7 @@ const Aurora = ({
       }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, []); // Пустой массив зависимостей, так как все обновления идут через propsRef
+  }, []); // Пустой массив зависимостей
 
   return (
     <div 
@@ -228,33 +238,46 @@ const Aurora = ({
   );
 };
 
-// И вот как вы можете использовать этот компонент в вашем Layout или любой странице:
-
-export const AuroraBackground = () => {
-  // Красивые цвета для северного сияния
-  const auroraColors = {
-    dark: ['#1a1a2e', '#16213e', '#0f3460'], // Темные синие тона
-    purple: ['#4a1d5c', '#2d1b3c', '#1a142b'], // Фиолетовые тона
-    green: ['#1a472a', '#2d5a3a', '#1e3a2a'], // Зеленые тона (как настоящее сияние)
-    red: ['#4a1a1a', '#3a1a1a', '#2a1a1a'], // Красные тона (под ваш бренд)
+// Компонент для фона с поддержкой темы
+export const AuroraBackground = ({ theme = 'dark' }) => {
+  const isDark = theme === 'dark';
+  
+  // Цвета для разных тем
+  const colorSchemes = {
+    dark: {
+      primary: ['#4a1d5c', '#2d1b3c', '#1a142b'], // Фиолетовое сияние
+      secondary: ['#1a1a2e', '#16213e', '#0f3460'], // Синее сияние
+      accent: ['#ef4444', '#b91c1c', '#7f1d1d'] // Красное сияние
+    },
+    light: {
+      primary: ['#9f7aea', '#805ad5', '#6b46c1'], // Светло-фиолетовое
+      secondary: ['#63b3ed', '#4299e1', '#3182ce'], // Светло-синее
+      accent: ['#fc8181', '#f56565', '#e53e3e'] // Светло-красное
+    }
   };
+
+  const colors = colorSchemes[theme];
 
   return (
     <div className="fixed inset-0 w-full h-full -z-10">
       <Aurora
-        colorStops={['#4a1d5c', '#2d1b3c', '#1a142b']} // Фиолетовое сияние
-        amplitude={1.2}
-        blend={0.6}
-        speed={0.5}
-        className="opacity-80"
+        colorStops={colors.primary}
+        amplitude={isDark ? 1.2 : 1.0}
+        blend={isDark ? 0.6 : 0.5}
+        speed={1.0} // Скорость уже увеличена в шейдере в 2 раза
+        opacity={isDark ? 1.0 : 0.8}
+        theme={theme}
+        className={isDark ? "opacity-80" : "opacity-60"}
       />
-      {/* Можно добавить второй слой для большей глубины */}
+      {/* Второй слой для большей глубины */}
       <Aurora
-        colorStops={['#1a1a2e', '#16213e', '#0f3460']} // Синее сияние
-        amplitude={0.8}
-        blend={0.4}
-        speed={0.3}
-        className="opacity-60"
+        colorStops={colors.secondary}
+        amplitude={isDark ? 0.8 : 0.6}
+        blend={isDark ? 0.4 : 0.3}
+        speed={0.6} // Скорость уже увеличена в шейдере в 2 раза
+        opacity={isDark ? 0.8 : 0.6}
+        theme={theme}
+        className={isDark ? "opacity-60" : "opacity-40"}
       />
     </div>
   );
