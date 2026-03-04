@@ -444,15 +444,15 @@ const Aurora = ({
 
   return (
     <div 
-      ref={ctnDom} 
+      ref={ctnDom}
       className={`w-full h-full absolute inset-0 pointer-events-none ${className}`} 
-      style={{ 
+      style={{
         ...style,
         background: 'transparent',
         zIndex: 0,
         transform: 'translateZ(0)', // Hardware acceleration
         willChange: 'transform'
-      }} 
+      }}
     />
   );
 };
