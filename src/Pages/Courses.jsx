@@ -73,8 +73,7 @@ const Courses = () => {
 
     // Фильтр по уровню
     if (selectedLevel !== "Все") {
-      // Здесь можно добавить логику фильтрации по уровню
-      // Например, по тегам или специальному полю
+      filtered = filtered.filter(course => course.tags && course.tags.includes(selectedLevel));
     }
 
     // Сортировка

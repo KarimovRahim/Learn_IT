@@ -9,11 +9,11 @@ import Footer from '../Components/Footer/Footer.jsx'
 import BurgerMenu from '../Components/BurgerMenu.jsx'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
-import log from '../assets/log.png'; // Импорт логотипа
+import log from '../assets/log.png';
 
 const Layout = () => {
   const [isScrolled, setIsScrolled] = useState(false)
-  const [isDark, setIsDark] = useState(false) // false = светлая тема по умолчанию
+  const [isDark, setIsDark] = useState(false)
   const location = useLocation()
 
   useEffect(() => {
@@ -46,7 +46,6 @@ const Layout = () => {
   useEffect(() => {
     const userTheme = localStorage.getItem('theme');
 
-    // Светлая тема по умолчанию
     const isDarkTheme = userTheme === 'dark';
 
     if (isDarkTheme) {
