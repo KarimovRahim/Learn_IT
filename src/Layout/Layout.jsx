@@ -100,9 +100,9 @@ const Layout = () => {
           >
             {/* Логотип с изображением вместо текста */}
             <div className="w-8 h-8 bg-red-600 rounded-md flex items-center justify-center shadow-lg overflow-hidden">
-              <img 
-                src={log} 
-                alt="Learn IT Logo" 
+              <img
+                src={log}
+                alt="Learn IT Logo"
                 className="w-5 h-5 object-contain"
               />
             </div>

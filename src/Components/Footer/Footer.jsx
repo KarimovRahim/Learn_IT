@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { HashLink } from 'react-router-hash-link';
 import { IconBrandTelegram, IconBrandFacebook, IconBrandInstagram } from '@tabler/icons-react';
 
 const Footer = () => {
@@ -83,7 +84,7 @@ const Footer = () => {
               <li><Link to="/" className="hover:text-red-600 transition-colors dark:hover:text-red-500">Наша команда</Link></li>
               <li><Link to="/services" className="hover:text-red-600 transition-colors dark:hover:text-red-500">Услуги</Link></li>
               <li><Link to="/news" className="hover:text-red-600 transition-colors dark:hover:text-red-500">Блог</Link></li>
-              <li><Link to="/" className="hover:text-red-600 transition-colors dark:hover:text-red-500">Контакты</Link></li>
+              <li><HashLink smooth to="/#contacts" className="hover:text-red-600 transition-colors dark:hover:text-red-500">Контакты</HashLink></li>
             </ul>
           </div>
 
