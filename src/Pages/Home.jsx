@@ -12,6 +12,7 @@ import Amir from '../assets/amir.jpg'
 import Ismoil from '../assets/ismoil.jpg'
 import Narzullo from '../assets/narzullo.jpg'
 import Aurora from '../Components/Aurora.jsx';
+import PartnerCard from '../Components/PartnerCard.jsx';
 import { ArrowRight, Code, Code2, TrendingUp, Smartphone, Database, PenTool, CheckCircle2, Award, Users, BookOpen, Clock, Calendar, Tag, User, MessageSquare, Newspaper, Share2, Heart, Lightbulb, Mail, MapPin, Phone as PhoneIcon } from 'lucide-react';
 
 const partnersApi = "https://ehjoi-manaviyat.pockethost.io/api/collections/learn_it_parthners/records";
@@ -948,113 +949,33 @@ const Home = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
       {partners.length > 0 ? (
         partners.map((partner, index) => (
-          <a
+          <PartnerCard
             key={partner.id}
-            href={partner.website || '#'}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay={100 + index * 50}
-          >
-            <div className="relative overflow-hidden rounded-xl aspect-square mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center border border-gray-200 dark:border-zinc-700 shadow-lg group-hover:shadow-xl transition-all duration-500">
-              
-              {/* Логотип партнёра */}
-              {partner.logo ? (
-                <img
-                  src={`https://ehjoi-manaviyat.pockethost.io/api/files/learn_it_parthners/${partner.id}/${partner.logo}`}
-                  alt={partner.name}
-                  className="w-full h-full object-contain p-8 transition-all duration-700 ease-out group-hover:scale-110"
-                  onError={(e) => {
-                    // Если логотип не загрузился, показываем первую букву названия
-                    e.target.style.display = 'none';
-                    e.target.parentElement.innerHTML = `
-                      <div class="text-4xl font-bold text-red-600 dark:text-red-500">
-                        ${partner.name.charAt(0)}
-                      </div>
-                    `;
-                  }}
-                />
-              ) : (
-                <div className="text-4xl font-bold text-red-600 dark:text-red-500">
-                  {partner.name.charAt(0)}
-                </div>
-              )}
-
-              {/* Оверлей с градиентом при наведении */}
-              <div className="absolute inset-0 bg-gradient-to-t from-red-600/90 via-red-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-              {/* Название компании при наведении (для мобильных) */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <p className="text-white text-sm font-medium text-center line-clamp-2">
-                  {partner.name}
-                </p>
-              </div>
-
-              {/* Иконка внешней ссылки */}
-              <div className="absolute top-4 right-4 w-8 h-8 bg-white/90 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 scale-0 group-hover:scale-100">
-                <span className="text-red-600 text-lg font-bold">↗</span>
-              </div>
-            </div>
-
-            <div className="text-center relative">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors duration-300">
-                {partner.name}
-              </h3>
-              
-              {partner.description && (
-                <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-1 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-300 line-clamp-2">
-                  {partner.description}
-                </p>
-              )}
-
-              {/* Линия под названием при наведении */}
-              <div className="w-0 h-0.5 bg-red-500 mx-auto mt-3 group-hover:w-16 transition-all duration-500"></div>
-            </div>
-          </a>
+            partner={partner}
+            index={index}
+            delay={100 + index * 50}
+          />
         ))
       ) : (
-        // Запасные партнёры в том же стиле
-        ['TechCorp', 'InnoSoft', 'DevStudio', 'CloudSystems'].map((partner, index) => (
-          <div
-            key={index}
-            className="group relative"
-            data-aos="fade-up"
-            data-aos-duration="600"
-            data-aos-delay={100 + index * 50}
-          >
-            <div className="relative overflow-hidden rounded-xl aspect-square mb-4 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-zinc-800 dark:to-zinc-900 flex items-center justify-center border border-gray-200 dark:border-zinc-700 shadow-lg group-hover:shadow-xl transition-all duration-500">
-              
-              {/* Первая буква названия как логотип */}
-              <div className="text-4xl font-bold text-red-600 dark:text-red-500 transition-all duration-700 ease-out group-hover:scale-110">
-                {partner.charAt(0)}
-              </div>
-
-              {/* Оверлей с градиентом при наведении */}
-              <div className="absolute inset-0 bg-gradient-to-t from-red-600/90 via-red-600/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-              {/* Название компании при наведении */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
-                <p className="text-white text-sm font-medium text-center">
-                  {partner}
-                </p>
-              </div>
-            </div>
-
-            <div className="text-center relative">
-              <h3 className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-red-600 dark:group-hover:text-red-500 transition-colors duration-300">
-                {partner}
-              </h3>
-              
-              <p className="text-gray-600 dark:text-gray-400 text-sm font-medium mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                Партнёр
-              </p>
-
-              {/* Линия под названием при наведении */}
-              <div className="w-0 h-0.5 bg-red-500 mx-auto mt-3 group-hover:w-16 transition-all duration-500"></div>
-            </div>
-          </div>
+        // Запасные партнёры если API пустой
+        [
+          { name: 'TechCorp', description: 'IT-компания' },
+          { name: 'InnoSoft', description: 'Разработка ПО' },
+          { name: 'DevStudio', description: 'Веб-студия' },
+          { name: 'CloudSystems', description: 'Облачные технологии' }
+        ].map((partner, index) => (
+          <PartnerCard
+            key={`fallback-${index}`}
+            partner={{
+              id: `fallback-${index}`,
+              name: partner.name,
+              description: partner.description,
+              website: '#',
+              logo: null
+            }}
+            index={index}
+            delay={100 + index * 50}
+          />
         ))
       )}
     </div>

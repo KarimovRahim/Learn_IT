@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Renderer, Program, Mesh, Color, Triangle } from 'ogl';
 
 const VERT = `#version 300 es
@@ -15,14 +15,9 @@ precision highp float;
 
 uniform float uTime;
 uniform float uAmplitude;
-uniform float uSpeed;
-uniform float uFrequency;
 uniform vec3 uColorStops[3];
 uniform vec2 uResolution;
 uniform float uBlend;
-uniform float uBrightness;
-uniform float uContrast;
-uniform float uOffset;
 
 out vec4 fragColor;
 
@@ -75,57 +70,35 @@ struct ColorStop {
   float position;
 };
 
-vec3 colorRamp(ColorStop colors[3], float factor) {
-  int index = 0;
-  for (int i = 0; i < 2; i++) {
-    if (colors[i].position <= factor) {
-      index = i;
-    }
-  }
-  
-  ColorStop currentColor = colors[index];
-  ColorStop nextColor = colors[index + 1];
-  float range = nextColor.position - currentColor.position;
-  float lerpFactor = range > 0.0 ? (factor - currentColor.position) / range : 0.0;
-  
-  return mix(currentColor.color, nextColor.color, lerpFactor);
+#define COLOR_RAMP(colors, factor, finalColor) {              \
+  int index = 0;                                            \
+  for (int i = 0; i < 2; i++) {                               \
+     ColorStop currentColor = colors[i];                    \
+     bool isInBetween = currentColor.position <= factor;    \
+     index = int(mix(float(index), float(i), float(isInBetween))); \
+  }                                                         \
+  ColorStop currentColor = colors[index];                   \
+  ColorStop nextColor = colors[index + 1];                  \
+  float range = nextColor.position - currentColor.position; \
+  float lerpFactor = (factor - currentColor.position) / range; \
+  finalColor = mix(currentColor.color, nextColor.color, lerpFactor); \
 }
 
 void main() {
   vec2 uv = gl_FragCoord.xy / uResolution;
-  
-  // Инвертируем Y для более естественного направления
-  uv.y = 1.0 - uv.y;
   
   ColorStop colors[3];
   colors[0] = ColorStop(uColorStops[0], 0.0);
   colors[1] = ColorStop(uColorStops[1], 0.5);
   colors[2] = ColorStop(uColorStops[2], 1.0);
   
-  vec3 rampColor = colorRamp(colors, uv.x);
+  vec3 rampColor;
+  COLOR_RAMP(colors, uv.x, rampColor);
   
-  // Основной шум с настраиваемыми параметрами
-  float noise1 = snoise(vec2(
-    uv.x * uFrequency + uTime * uSpeed * 0.3,
-    uTime * uSpeed * 0.5
-  ));
-  
-  float noise2 = snoise(vec2(
-    uv.x * uFrequency * 1.5 + uTime * uSpeed * 0.2 + 10.0,
-    uTime * uSpeed * 0.3
-  ));
-  
-  float noise3 = snoise(vec2(
-    uv.x * uFrequency * 2.0 + uTime * uSpeed * 0.1 + 20.0,
-    uTime * uSpeed * 0.4
-  ));
-  
-  // Комбинируем шумы для большей сложности
-  float height = (noise1 * 0.5 + noise2 * 0.3 + noise3 * 0.2) * uAmplitude;
-  height = exp(height * uContrast);
-  height = (uv.y * 2.0 - height + uOffset);
-  
-  float intensity = 0.6 * height * uBrightness;
+  float height = snoise(vec2(uv.x * 2.0 + uTime * 0.2, uTime * 0.5)) * 0.5 * uAmplitude;
+  height = exp(height);
+  height = (uv.y * 2.0 - height + 0.2);
+  float intensity = 0.6 * height;
   
   float midPoint = 0.20;
   float auroraAlpha = smoothstep(midPoint - uBlend * 0.5, midPoint + uBlend * 0.5, intensity);
@@ -141,165 +114,79 @@ const Aurora = ({
   amplitude = 1.0,
   blend = 0.5,
   speed = 1.0,
-  frequency = 2.0,
-  brightness = 1.0,
-  contrast = 1.0,
-  offset = 0.2,
   time = 0,
   className = '',
-  style = {},
-  mobileOptimized = true,
-  quality = 'auto', // 'low', 'medium', 'high', 'auto'
-  fallbackColor = '#ffb3b3'
+  style = {}
 }) => {
   const ctnDom = useRef(null);
   const canvasRef = useRef(null);
   const [isSupported, setIsSupported] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
-  const animationFrameRef = useRef();
-  const propsRef = useRef({ colorStops, amplitude, blend, speed, frequency, brightness, contrast, offset, time });
-  const rendererRef = useRef(null);
-  const programRef = useRef(null);
-
-  // Мемоизация цветов для производительности
-  const memoizedColorStops = useMemo(() => {
-    return colorStops.map(hex => {
-      const c = new Color(hex);
-      return [c.r, c.g, c.b];
-    });
-  }, [colorStops]);
+  const propsRef = useRef({ colorStops, amplitude, blend, speed, time });
 
   useEffect(() => {
-    propsRef.current = { colorStops, amplitude, blend, speed, frequency, brightness, contrast, offset, time };
-  }, [colorStops, amplitude, blend, speed, frequency, brightness, contrast, offset, time]);
-
-  // Определение мобильного устройства
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768 || 'ontouchstart' in window);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Определение качества рендеринга
-  const getQualitySettings = useCallback(() => {
-    if (quality !== 'auto') return quality;
-    
-    if (isMobile && mobileOptimized) {
-      return 'low';
-    }
-    
-    // Автоматическое определение на основе производительности
-    const pixelRatio = window.devicePixelRatio || 1;
-    if (pixelRatio > 2) return 'high';
-    if (pixelRatio > 1) return 'medium';
-    return 'low';
-  }, [isMobile, mobileOptimized, quality]);
+    propsRef.current = { colorStops, amplitude, blend, speed, time };
+  }, [colorStops, amplitude, blend, speed, time]);
 
   useEffect(() => {
     const ctn = ctnDom.current;
     if (!ctn) return;
 
-    // Проверка поддержки WebGL с улучшенной диагностикой
+    // Проверка поддержки WebGL
     const checkWebGLSupport = () => {
       try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        
         if (!gl) {
-          console.warn('WebGL not supported, using fallback gradient');
           setIsSupported(false);
           return false;
         }
-        
-        // Проверка на поддержку расширений
-        const requiredExtensions = ['OES_texture_float'];
-        const hasRequiredExtensions = requiredExtensions.every(ext => 
-          gl.getExtension(ext) !== null
-        );
-        
-        if (!hasRequiredExtensions && isMobile) {
-          console.warn('Some WebGL extensions not available, may affect performance');
-        }
-        
         return true;
       } catch (e) {
-        console.error('WebGL check error:', e);
         setIsSupported(false);
         return false;
       }
     };
 
     if (!checkWebGLSupport()) {
+      // Если WebGL не поддерживается, показываем статический градиент
       return;
     }
 
-    let renderer, gl, program, mesh;
-    const qualityLevel = getQualitySettings();
+    let renderer, gl, program, mesh, animateId;
 
     try {
-      // Настройки рендерера в зависимости от качества
-      const rendererOptions = {
+      renderer = new Renderer({
         alpha: true,
         premultipliedAlpha: true,
-        antialias: qualityLevel !== 'low',
-        powerPreference: qualityLevel === 'high' ? "high-performance" : "default",
-        depth: false,
-        stencil: false,
-        preserveDrawingBuffer: false
-      };
+        antialias: true,
+        powerPreference: "high-performance"
+      });
 
-      renderer = new Renderer(rendererOptions);
-      rendererRef.current = renderer;
-      
       gl = renderer.gl;
       if (!gl) {
         setIsSupported(false);
         return;
       }
 
-      // Оптимизация для мобильных устройств
-      if (isMobile && mobileOptimized) {
-        const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-        renderer.setPixelRatio(pixelRatio);
-      }
-
       gl.clearColor(0, 0, 0, 0);
       gl.enable(gl.BLEND);
       gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
-      
-      // Стили canvas
-      Object.assign(gl.canvas.style, {
-        backgroundColor: 'transparent',
-        width: '100%',
-        height: '100%',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        pointerEvents: 'none',
-        willChange: 'transform' // Подсказка для браузера об оптимизации
-      });
+      gl.canvas.style.backgroundColor = 'transparent';
+      gl.canvas.style.width = '100%';
+      gl.canvas.style.height = '100%';
+      gl.canvas.style.position = 'absolute';
+      gl.canvas.style.top = '0';
+      gl.canvas.style.left = '0';
+      gl.canvas.style.pointerEvents = 'none';
 
-      // Оптимизированная функция resize с throttle
-      let resizeTimeout;
-      const resize = () => {
+      function resize() {
         if (!ctn || !renderer || !program) return;
-        
-        if (resizeTimeout) cancelAnimationFrame(resizeTimeout);
-        
-        resizeTimeout = requestAnimationFrame(() => {
-          const width = ctn.offsetWidth;
-          const height = ctn.offsetHeight;
-          if (width === 0 || height === 0) return;
-          
-          renderer.setSize(width, height);
-          program.uniforms.uResolution.value = [width, height];
-        });
-      };
+        const width = ctn.offsetWidth;
+        const height = ctn.offsetHeight;
+        if (width === 0 || height === 0) return;
+        renderer.setSize(width, height);
+        program.uniforms.uResolution.value = [width, height];
+      }
 
       window.addEventListener('resize', resize);
 
@@ -308,72 +195,55 @@ const Aurora = ({
         delete geometry.attributes.uv;
       }
 
+      const colorStopsArray = colorStops.map(hex => {
+        const c = new Color(hex);
+        return [c.r, c.g, c.b];
+      });
+
       program = new Program(gl, {
         vertex: VERT,
         fragment: FRAG,
         uniforms: {
           uTime: { value: 0 },
           uAmplitude: { value: amplitude },
-          uSpeed: { value: speed },
-          uFrequency: { value: frequency },
-          uColorStops: { value: memoizedColorStops },
+          uColorStops: { value: colorStopsArray },
           uResolution: { value: [ctn.offsetWidth || 300, ctn.offsetHeight || 300] },
-          uBlend: { value: blend },
-          uBrightness: { value: brightness },
-          uContrast: { value: contrast },
-          uOffset: { value: offset }
+          uBlend: { value: blend }
         }
       });
-      
-      programRef.current = program;
 
       mesh = new Mesh(gl, { geometry, program });
 
-      // Безопасное удаление предыдущего canvas
-      if (canvasRef.current && canvasRef.current.parentNode === ctn) {
-        ctn.removeChild(canvasRef.current);
+      // Убедимся, что canvas не дублируется
+      if (canvasRef.current) {
+        try {
+          if (canvasRef.current.parentNode === ctn) {
+            ctn.removeChild(canvasRef.current);
+          }
+        } catch (e) { }
       }
 
       ctn.appendChild(gl.canvas);
       canvasRef.current = gl.canvas;
 
       const startTime = performance.now();
-      let lastFrameTime = 0;
-      const frameInterval = 1000 / 60; // 60 FPS
 
-      const update = (currentTime) => {
+      const update = () => {
         if (!program || !renderer || !mesh) return;
-
-        // Throttle для экономии батареи на мобильных
-        if (isMobile && mobileOptimized && currentTime - lastFrameTime < frameInterval) {
-          animationFrameRef.current = requestAnimationFrame(update);
-          return;
-        }
-
-        lastFrameTime = currentTime;
-        animationFrameRef.current = requestAnimationFrame(update);
+        animateId = requestAnimationFrame(update);
 
         const currentProps = propsRef.current;
         const elapsed = (performance.now() - startTime) * 0.001;
 
-        // Обновление uniform'ов
         program.uniforms.uTime.value = (currentProps.time + elapsed) * currentProps.speed * 0.2;
         program.uniforms.uAmplitude.value = currentProps.amplitude;
-        program.uniforms.uSpeed.value = currentProps.speed;
-        program.uniforms.uFrequency.value = currentProps.frequency;
         program.uniforms.uBlend.value = currentProps.blend;
-        program.uniforms.uBrightness.value = currentProps.brightness;
-        program.uniforms.uContrast.value = currentProps.contrast;
-        program.uniforms.uOffset.value = currentProps.offset;
 
-        // Обновление цветов только при изменении
-        const currentStops = currentProps.colorStops;
-        if (JSON.stringify(currentStops) !== JSON.stringify(colorStops)) {
-          program.uniforms.uColorStops.value = currentStops.map(hex => {
-            const c = new Color(hex);
-            return [c.r, c.g, c.b];
-          });
-        }
+        const stops = currentProps.colorStops;
+        program.uniforms.uColorStops.value = stops.map(hex => {
+          const c = new Color(hex);
+          return [c.r, c.g, c.b];
+        });
 
         try {
           renderer.render({ scene: mesh });
@@ -382,60 +252,41 @@ const Aurora = ({
         }
       };
 
-      animationFrameRef.current = requestAnimationFrame(update);
+      animateId = requestAnimationFrame(update);
 
-      // Первоначальный resize
+      // Задержка для корректного ресайза
       setTimeout(resize, 100);
 
       return () => {
-        if (animationFrameRef.current) {
-          cancelAnimationFrame(animationFrameRef.current);
-        }
-        
+        cancelAnimationFrame(animateId);
         window.removeEventListener('resize', resize);
-        
-        // Очистка ресурсов
         try {
           if (ctn && gl?.canvas?.parentNode === ctn) {
             ctn.removeChild(gl.canvas);
           }
-          
           if (gl) {
             gl.getExtension('WEBGL_lose_context')?.loseContext();
           }
-          
-          if (geometry) geometry.dispose();
-          if (program) program.dispose();
-          if (mesh) mesh.dispose();
-          if (renderer) renderer.dispose();
-        } catch (e) {
-          // Игнорируем ошибки при очистке
-        }
+        } catch (e) { }
       };
     } catch (error) {
       console.error('WebGL initialization error:', error);
       setIsSupported(false);
       return;
     }
-  }, [memoizedColorStops, isMobile, mobileOptimized, getQualitySettings]);
+  }, []);
 
-  // Улучшенный статический градиент для fallback
+  // Если WebGL не поддерживается, показываем статичный градиент
   if (!isSupported) {
-    const gradientStyle = {
-      background: `radial-gradient(circle at 30% 50%, ${colorStops[0]} 0%, ${colorStops[1]} 50%, ${colorStops[2]} 100%)`,
-      opacity: 0.4,
-      filter: 'blur(40px)',
-      transform: 'translateZ(0)', // Hardware acceleration
-      willChange: 'transform, opacity'
-    };
-
+    const gradientColors = colorStops.join(', ');
     return (
-      <div 
-        ref={ctnDom} 
+      <div
+        ref={ctnDom}
         className={`w-full h-full absolute inset-0 pointer-events-none ${className}`}
         style={{
           ...style,
-          ...gradientStyle,
+          background: `linear-gradient(45deg, ${gradientColors})`,
+          opacity: 0.3,
           zIndex: 0
         }}
       />
@@ -443,15 +294,13 @@ const Aurora = ({
   }
 
   return (
-    <div 
+    <div
       ref={ctnDom}
-      className={`w-full h-full absolute inset-0 pointer-events-none ${className}`} 
+      className={`w-full h-full absolute inset-0 pointer-events-none ${className}`}
       style={{
         ...style,
         background: 'transparent',
-        zIndex: 0,
-        transform: 'translateZ(0)', // Hardware acceleration
-        willChange: 'transform'
+        zIndex: 0
       }}
     />
   );
