@@ -267,37 +267,46 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Правая колонка - логотип */}
-            <div
-              className="order-1 lg:order-2 flex justify-center lg:justify-end items-center"
-              data-aos="fade-up"
-              data-aos-duration="1000"
-              data-aos-delay="300"
-              data-aos-offset="100"
-            >
-              <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
-                <img
-                  src={log}
-                  alt="Learn IT Academy"
-                  className="w-full h-auto object-contain drop-shadow-2xl"
-                />
+{/* Правая колонка - логотип */}
+<div
+  className="order-1 lg:order-2 flex justify-center lg:justify-end items-center"
+  data-aos="fade-up"
+  data-aos-duration="1000"
+  data-aos-delay="300"
+  data-aos-offset="100"
+>
+  <div className="relative w-full max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl">
+    {/* Красное свечение за логотипом для светлой темы */}
+    <div className="absolute inset-0 flex items-center justify-center dark:hidden">
+      <div className="w-[80%] h-[80%] bg-gradient-to-r from-red-400/30 to-red-500/30 rounded-full blur-2xl" />
+    </div>
+    
+    {/* Логотип с красной тенью */}
+    <img
+      src={log}
+      alt="Learn IT Academy"
+      className="w-full h-auto object-contain relative z-10
+        drop-shadow-[0_0_20px_rgba(239,68,68,0.6)]
+        dark:drop-shadow-[0_20px_30px_rgba(255,255,255,0.1)]
+        dark:brightness-100 dark:invert-0"
+    />
 
-                {/* Декоративные элементы */}
-                <div
-                  className="absolute -top-10 -right-10 w-40 h-40 bg-red-200/40 rounded-full blur-3xl dark:bg-red-500/20"
-                  data-aos="fade-left"
-                  data-aos-duration="1000"
-                  data-aos-delay="500"
-                />
+    {/* Декоративные элементы */}
+    <div
+      className="absolute -top-10 -right-10 w-40 h-40 bg-gradient-to-br from-red-300/40 to-red-400/40 rounded-full blur-3xl dark:bg-red-500/20"
+      data-aos="fade-left"
+      data-aos-duration="1000"
+      data-aos-delay="500"
+    />
 
-                <div
-                  className="absolute -bottom-10 -left-10 w-40 h-40 bg-amber-200/40 rounded-full blur-3xl dark:bg-orange-500/20"
-                  data-aos="fade-right"
-                  data-aos-duration="1000"
-                  data-aos-delay="600"
-                />
-              </div>
-            </div>
+    <div
+      className="absolute -bottom-10 -left-10 w-40 h-40 bg-gradient-to-br from-amber-300/40 to-amber-400/40 rounded-full blur-3xl dark:bg-orange-500/20"
+      data-aos="fade-right"
+      data-aos-duration="1000"
+      data-aos-delay="600"
+    />
+  </div>
+</div>
           </div>
         </div>
 
